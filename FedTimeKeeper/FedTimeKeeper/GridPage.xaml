@@ -1,0 +1,64 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FedTimeKeeper.GridPage">
+
+    <StackLayout>
+
+        <Label BackgroundColor="BlanchedAlmond" TextColor="Black"  >Leave Information</Label>
+        <Label>
+            As of Pay Period End Date: 07/17/21
+        </Label>
+        
+        <Grid BackgroundColor="Tan">
+
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+                <RowDefinition Height="Auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+                <ColumnDefinition Width="*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+
+            <Label Text="Type" Grid.Row="0" Grid.Column="0"></Label>
+            <Label Text="Beginning Balance" Grid.Row="0" Grid.Column="1"></Label>
+            <Label Text="Earned YTD" Grid.Row="0" Grid.Column="2"></Label>
+            <Label Text="Used YTD" Grid.Row="0" Grid.Column="3"></Label>
+            <Label Text="Ending Balance" Grid.Row="0" Grid.Column="4"></Label>
+
+            <Label Text="Annual" Grid.Row="1" Grid.Column="0"></Label>
+            <Label Text="203.00" Grid.Row="1" Grid.Column="1"></Label>
+            <Label Text="112.00" Grid.Row="1" Grid.Column="2"></Label>
+            <Label Text="28.00" Grid.Row="1" Grid.Column="3"></Label>
+            <Label Text="287.00" Grid.Row="1" Grid.Column="4"></Label>
+
+            <Label Text="Annual, Use or Lose" Grid.Row="1" Grid.Column="0"></Label>
+            <Label Text="N/A" Grid.Row="2" Grid.Column="1"></Label>
+            <Label Text="N/A" Grid.Row="2" Grid.Column="2"></Label>
+            <Label Text="N/A" Grid.Row="2" Grid.Column="3"></Label>
+            <Label Text="143.00" Grid.Row="2" Grid.Column="4"></Label>
+
+            <Label Text="Sick" Grid.Row="3" Grid.Column="0"></Label>
+            <Label Text="112.00" Grid.Row="3" Grid.Column="1"></Label>
+            <Label Text="56.00" Grid.Row="3" Grid.Column="2"></Label>
+            <Label Text="16.00" Grid.Row="3" Grid.Column="3"></Label>
+            <Label Text="152.00" Grid.Row="3" Grid.Column="4"></Label>
+
+            <Label Text="Time-off" Grid.Row="4" Grid.Column="0"></Label>
+            <Label Text="32.00" Grid.Row="4" Grid.Column="1"></Label>
+            <Label Text="32.00" Grid.Row="4" Grid.Column="2"></Label>
+            <Label Text="16.00" Grid.Row="4" Grid.Column="3"></Label>
+            <Label Text="16.00" Grid.Row="4" Grid.Column="4"></Label>
+
+        </Grid>
+        
+    </StackLayout>
+    
+</ContentPage>

@@ -1,0 +1,33 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FedTimeKeeper.Helpers.AddLeavePageView">
+
+    <StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Leave Type" VerticalOptions="Center"/>
+            <Picker Title="Select Leave Type" VerticalOptions="Center"
+                    x:Name="LeaveTypePicker"
+                    SelectedIndexChanged="LeaveTypePicker_SelectedIndexChanged">
+            </Picker>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Start Date:" VerticalOptions="Center"/>
+            <DatePicker x:Name="StartDatePicker" DateSelected="StartDatePicker_DateSelected" VerticalOptions="Center" ></DatePicker>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal">
+            <Label Text="End Date:" VerticalOptions="Center"/>
+            <DatePicker x:Name="EndDatePicker" DateSelected="EndDatePicker_DateSelected" VerticalOptions="Center"></DatePicker>
+        </StackLayout>
+
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Hours Taken:" VerticalOptions="Center"/>
+            <Entry x:Name="HoursTakenEntry" TextChanged="HoursTakenEntry_TextChanged" Keyboard="Numeric" VerticalOptions="Center"/>
+        </StackLayout>
+
+        <Button Text="Save" x:Name="SaveButton" Clicked="SaveButton_Clicked" IsEnabled="False"/>
+    </StackLayout>
+
+</ContentPage>
