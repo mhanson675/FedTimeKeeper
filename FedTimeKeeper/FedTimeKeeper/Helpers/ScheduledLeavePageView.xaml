@@ -2,11 +2,24 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FedTimeKeeper.Helpers.ScheduledLeavePageView">
-    <ContentPage.Content>
-        <StackLayout>
-            <Label Text="View Scheduled Leave Here"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
-        </StackLayout>
-    </ContentPage.Content>
+
+    <ListView x:Name="ScheduledLeaveListView" VerticalOptions="Fill" CachingStrategy="RecycleElement">
+        <ListView.ItemTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding StartDate, StringFormat='{0:dd-MMM-yyyy \\to}'}"></Label>
+                            <!--<Label Text=" - " />-->
+                            <Label Text="{Binding EndDate, StringFormat='{0:dd-MMM-yyyy}'}"></Label>
+                        </StackLayout>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="{Binding Type, StringFormat='{0:N}'}"></Label>
+                            <Label Text="{Binding HoursTaken}"></Label>
+                        </StackLayout>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+    </ListView>
 </ContentPage>

@@ -15,8 +15,7 @@
         </StackLayout>
         <StackLayout Orientation="Horizontal">
             <Label Text="Starting Leave Balance" VerticalOptions="Center"></Label>
-            <Entry Placeholder="Enter Starting Leave Balance" VerticalOptions="Center"></Entry>
+            <Entry Keyboard="Numeric" Placeholder="Enter Starting Leave Balance" VerticalOptions="Center"></Entry>
         </StackLayout>
     </StackLayout>
-    
 </ContentPage>
