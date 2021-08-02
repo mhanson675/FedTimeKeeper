@@ -7,12 +7,13 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace FedTimeKeeper.Helpers
+namespace FedTimeKeeper.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AddLeavePageView : ContentPage
     {
         private string leaveType;
+
         public AddLeavePageView()
         {
             InitializeComponent();
@@ -44,7 +45,6 @@ namespace FedTimeKeeper.Helpers
             SaveButton.IsEnabled = CheckCanSave();
         }
 
-
         private void StartDatePicker_DateSelected(object sender, DateChangedEventArgs e)
         {
             SaveButton.IsEnabled = CheckCanSave();
@@ -59,6 +59,7 @@ namespace FedTimeKeeper.Helpers
         {
             SaveButton.IsEnabled = CheckCanSave();
         }
+
         private bool CheckCanSave()
         {
             if (LeaveTypePicked() && HoursRequestedEntered() && ValidDateRange())

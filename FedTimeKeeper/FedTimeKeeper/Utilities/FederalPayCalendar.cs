@@ -9,30 +9,64 @@ namespace FedTimeKeeper.Utilities
     public class FederalPayCalendar
     {
         private int payPeriodLength = 14;
-        public DateTime WeekOneStartDate { get; }
-        public FederalPayCalendar(DateTime weekOneStartDate)
+        private DateTime firstpayPeriodStartDate;
+        private DateTime lastPayPeriodStartDate;
+        private int payPeriodCount;
+
+        public FederalPayCalendar(DateTime firstPayPeriod, DateTime lastPayPeriod)
         {
-            WeekOneStartDate = weekOneStartDate;
+            firstpayPeriodStartDate = firstPayPeriod;
+            lastPayPeriodStartDate = lastPayPeriod;
+            GetPayPeriodCount(firstPayPeriod, lastPayPeriod);
         }
 
-        public DateTime GetPayPeriodStartDate(FederalPayPeriod payPeriod)
+        private void GetPayPeriodCount(DateTime firstPayPeriod, DateTime lastPayPeriod)
         {
-            return WeekOneStartDate.AddDays(payPeriodLength * (payPeriod.Period - 1));
+            payPeriodCount = (lastPayPeriod.Subtract(firstPayPeriod).Days / payPeriodLength) + 1;
         }
 
-        public DateTime GetPayPeriodEndDate(FederalPayPeriod payPeriod)
+        public DateTime GetPayPeriodStartDate(DateTime date)
         {
-            return WeekOneStartDate.AddDays(payPeriodLength * payPeriod.Period - 1);
+            var difference = date.Subtract(firstpayPeriodStartDate).Days;
+            var currentPayPeriod = difference / payPeriodLength;
+
+            var currentPayPeriodStart = firstpayPeriodStartDate.AddDays(currentPayPeriod * payPeriodLength);
+
+            return currentPayPeriodStart;
+        }
+
+        public DateTime GetPayPeriodEndDate(DateTime date)
+        {
+            var payPeriodStart = GetPayPeriodStartDate(date);
+            return payPeriodStart.AddDays(payPeriodLength - 1);
         }
 
         public FederalPayPeriod GetCurrentPayPeriod(DateTime date)
         {
-            var difference = date.Subtract(WeekOneStartDate).Days;
+            var difference = date.Subtract(firstpayPeriodStartDate).Days;
 
+            var start = GetPayPeriodStartDate(date);
+            var end = GetPayPeriodEndDate(date);
             var period = difference / payPeriodLength + 1;
 
-            return new FederalPayPeriod(period);
+            return new FederalPayPeriod(start, end, period);
         }
 
+        public FederalPayPeriod GetFirstPayPeriod()
+        {
+            var start = firstpayPeriodStartDate;
+            var end = start.AddDays(payPeriodLength - 1);
+            var period = 1;
+
+            return new FederalPayPeriod(start, end, period);
+        }
+
+        public FederalPayPeriod GetLastPayPeriod()
+        {
+            var start = lastPayPeriodStartDate;
+            var end = start.AddDays(payPeriodLength - 1);
+
+            return new FederalPayPeriod(start, end, payPeriodCount);
+        }
     }
 }

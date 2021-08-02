@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms" 
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="FedTimeKeeper.ResourceDictionaries.DarkTheme">
 
@@ -8,10 +8,24 @@
     <Color x:Key="TextPrimaryColor">#B0FFFFFF</Color>
     <Color x:Key="TextScondaryColor">#eFeFeF</Color>
 
-    <Style x:Key="Title" TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}"/>
-        <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="FontSize" Value="Large"/>
+    <Style TargetType="ContentPage">
+        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+    </Style>
+    <Style TargetType="TableView">
+        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+    </Style>
+    <Style TargetType="Picker">
+        <Setter Property="BackgroundColor" Value="{StaticResource TextScondaryColor}" />
+        <Setter Property="TextColor" Value="{StaticResource FrameColor}" />
+    </Style>
+    <Style TargetType="ListView">
+        <Setter Property="BackgroundColor" Value="{StaticResource BackgroundColor}" />
+        <Setter Property="SeparatorColor" Value="{StaticResource TextScondaryColor}" />
+        <Setter Property="SeparatorVisibility" Value="Default" />
+    </Style>
+    <Style TargetType="Label">
+        <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+        <Setter Property="VerticalOptions" Value="Center" />
     </Style>
 
     <!--<Color x:Key="BackgroundColor">#FFe0e0e0</Color>
@@ -20,8 +34,8 @@
     <Color x:Key="TextScondaryColor">#858585</Color>
 
     <Style x:Key="Title" TargetType="Label">
-        <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}"/>
-        <Setter Property="FontAttributes" Value="Bold"/>
-        <Setter Property="FontSize" Value="Large"/>
+        <Setter Property="TextColor" Value="{StaticResource TextPrimaryColor}" />
+        <Setter Property="FontAttributes" Value="Bold" />
+        <Setter Property="FontSize" Value="Large" />
     </Style>-->
 </ResourceDictionary>

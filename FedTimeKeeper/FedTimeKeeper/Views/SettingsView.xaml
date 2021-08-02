@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FedTimeKeeper.Views.SettingsView"
+             Title="App Settings">
+
+    <TableView>
+        <TableRoot>
+            <TableSection Title="User Settings">
+                <ViewCell>
+                    <ViewCell.View>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Starting Leave Balance" VerticalOptions="Center"></Label>
+                            <Entry Keyboard="Numeric" Placeholder="Enter Starting Leave Balance" VerticalOptions="Center"
+                                   x:Name="StartLeaveBalanceEntry" TextChanged="StartLeaveBalanceEntry_TextChanged"></Entry>
+                        </StackLayout>
+                    </ViewCell.View>
+                </ViewCell>
+                <ViewCell>
+                    <ViewCell.View>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Start of First Pay Period this Year"></Label>
+                            <DatePicker x:Name="FirstPayPeriodDatePicker" DateSelected="FirstPayPeriodDatePicker_DateSelected"></DatePicker>
+                        </StackLayout>
+                    </ViewCell.View>
+                </ViewCell>
+                <ViewCell>
+                    <ViewCell.View>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Start of Last Pay Period this Year"></Label>
+                            <DatePicker x:Name="LastPayPeriodDatePicker" DateSelected="LastPayPeriodDatePicker_DateSelected"></DatePicker>
+                        </StackLayout>
+                    </ViewCell.View>
+                </ViewCell>
+                <ViewCell>
+                    <ViewCell.View>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Leave Accrual Rate" />
+                            <Picker Title="Current Leave Accrual Rate" x:Name="LeaveAccrualPicker"
+                                    SelectedIndexChanged="LeaveAccrualPicker_SelectedIndexChanged">
+                            </Picker>
+                        </StackLayout>
+                    </ViewCell.View>
+                </ViewCell>
+            </TableSection>
+        </TableRoot>
+    </TableView>
+</ContentPage>

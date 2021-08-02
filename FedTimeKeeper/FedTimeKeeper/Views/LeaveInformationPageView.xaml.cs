@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-namespace FedTimeKeeper.Helpers
+namespace FedTimeKeeper.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class HomePageView : ContentPage
+    public partial class LeaveInformationPageView : ContentPage
     {
-        public HomePageView()
+        public LeaveInformationPageView()
         {
             InitializeComponent();
         }

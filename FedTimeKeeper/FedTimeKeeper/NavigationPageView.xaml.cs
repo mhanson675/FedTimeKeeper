@@ -1,4 +1,4 @@
-﻿using FedTimeKeeper.Helpers;
+﻿using FedTimeKeeper.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -36,6 +36,11 @@ namespace FedTimeKeeper
         private async void ScheduledLeaveButton_Clicked(object sender, EventArgs e)
         {
             await Navigation.PushAsync(new ScheduledLeavePageView());
+        }
+
+        private async void AppSettingsButton_Clicked(object sender, EventArgs e)
+        {
+            await Navigation.PushAsync(new SettingsView());
         }
     }
 }

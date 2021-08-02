@@ -1,7 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FedTimeKeeper.Helpers.ScheduledLeavePageView">
+             x:Class="FedTimeKeeper.Views.ScheduledLeavePageView"
+             Title="Upcoming Scheduled Leave">
 
     <ListView x:Name="ScheduledLeaveListView" VerticalOptions="Fill" CachingStrategy="RecycleElement">
         <ListView.ItemTemplate>
@@ -10,12 +11,11 @@
                     <StackLayout>
                         <StackLayout Orientation="Horizontal">
                             <Label Text="{Binding StartDate, StringFormat='{0:dd-MMM-yyyy \\to}'}"></Label>
-                            <!--<Label Text=" - " />-->
                             <Label Text="{Binding EndDate, StringFormat='{0:dd-MMM-yyyy}'}"></Label>
                         </StackLayout>
                         <StackLayout Orientation="Horizontal">
-                            <Label Text="{Binding Type, StringFormat='{0:N}'}"></Label>
-                            <Label Text="{Binding HoursTaken}"></Label>
+                            <Label Text="{Binding Type, StringFormat='{0}:'}"></Label>
+                            <Label Text="{Binding HoursTaken, StringFormat='{0:F2} hours'}"></Label>
                         </StackLayout>
                     </StackLayout>
                 </ViewCell>

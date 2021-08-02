@@ -8,5 +8,6 @@
         <Button Text="View Leave Information" Margin="5" x:Name="ViewLeaveButton" Clicked="ViewLeaveButton_Clicked"></Button>
         <Button Text="Scheduled Leave" Margin="5" x:Name="ScheduledLeaveButton" Clicked="ScheduledLeaveButton_Clicked"></Button>
         <Button Text="Schedule New Leave" Margin="5" x:Name="AddLeaveButton" Clicked="AddLeaveButton_Clicked"></Button>
+        <Button Text="App Settings" Margin="5" x:Name="AppSettingsButton" Clicked="AppSettingsButton_Clicked"></Button>
     </StackLayout>
 </ContentPage>
