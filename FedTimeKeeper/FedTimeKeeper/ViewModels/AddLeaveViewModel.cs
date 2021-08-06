@@ -22,7 +22,7 @@ namespace FedTimeKeeper.ViewModels
         public ICommand SaveLeaveCommand => new Command(SaveLeave);
         public ICommand CancelCommand => new Command(Cancel);
 
-        
+
         private LeaveType selectedLeaveType;
         public LeaveType SelectedLeaveType
         {
@@ -31,7 +31,7 @@ namespace FedTimeKeeper.ViewModels
             {
                 selectedLeaveType = value;
                 OnPropertyChanged(nameof(SelectedLeaveType));
-                LeaveTypeText = LeaveTypeToText(selectedLeaveType);
+                //LeaveTypeText = LeaveTypeToText(selectedLeaveType);
             }
         }
 
@@ -53,8 +53,17 @@ namespace FedTimeKeeper.ViewModels
             get => startDate;
             set
             {
-                startDate = value;
-                OnPropertyChanged(nameof(StartDate));
+                if (value <= EndDate)
+                {
+                    startDate = value;
+                    OnPropertyChanged(nameof(StartDate));
+                }
+                else
+                {
+                    StartDate = startDate;
+                    OnPropertyChanged(nameof(StartDate));
+                    ThrowInvalidDateMessage();
+                }
             }
         }
 
@@ -64,8 +73,17 @@ namespace FedTimeKeeper.ViewModels
             get => endDate;
             set
             {
-                endDate = value;
-                OnPropertyChanged(nameof(EndDate));
+                if (StartDate <= value)
+                {
+                    endDate = value;
+                    OnPropertyChanged(nameof(EndDate));
+                }
+                else
+                {
+                    EndDate = endDate;
+                    OnPropertyChanged(nameof(StartDate));
+                    ThrowInvalidDateMessage();
+                }
             }
         }
 
@@ -88,8 +106,8 @@ namespace FedTimeKeeper.ViewModels
             LeaveTypes = new List<string> { ANNUAL, SICK, TIMEOFF };
             LeaveTypeText = string.Empty;
             SelectedLeaveType = new LeaveType();
-            StartDate = DateTime.Now;
             EndDate = DateTime.Now;
+            StartDate = DateTime.Now;
         }
 
         private void Cancel(object obj)
@@ -111,17 +129,10 @@ namespace FedTimeKeeper.ViewModels
             navigation.DisplayAlertMessage("Leave Saved", $"{newLeave.Type} leave has been scheduled.", "Ok");
             navigation.GoBack();
         }
-        private string LeaveTypeToText(LeaveType leaveType)
+
+        private void ThrowInvalidDateMessage()
         {
-            switch (leaveType)
-            {
-                case LeaveType.Sick:
-                    return SICK;
-                case LeaveType.Timeoff:
-                    return TIMEOFF;
-                default:
-                    return ANNUAL;
-            };
+            navigation.DisplayAlertMessage("Invalid End Date", "The End Date must be on or after the Start Date.", "Ok");
         }
     }
 }
