@@ -12,6 +12,6 @@ namespace FedTimeKeeper.Services.Interfaces
         void Configure(string key, Type pageType);
         void GoBack();
         void NavigateTo(string pageKey, object parameter = null);
-        void DisplayAlert(string title, string message, string cancel);
+        void DisplayAlertMessage(string title, string message, string cancel);
     }
 }

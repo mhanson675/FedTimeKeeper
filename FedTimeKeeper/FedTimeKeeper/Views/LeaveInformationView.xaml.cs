@@ -15,17 +15,11 @@ namespace FedTimeKeeper.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class LeaveInformationView : ContentPage
     {
-        private readonly ILeaveSummaryService leaveSummaryService;
-
-        public LeaveInformationViewModel LeaveInformationViewModel { get; set; }
-        public LeaveInformationView(ILeaveSummaryService leaveSummaryService)
+        public LeaveInformationView()
         {
             InitializeComponent();
 
-            LeaveInformationViewModel = new LeaveInformationViewModel(leaveSummaryService);
-
-            BindingContext = LeaveInformationViewModel;
-            this.leaveSummaryService = leaveSummaryService;
+            BindingContext = App.GetViewModel<LeaveInformationViewModel>();
         }
     }
 }

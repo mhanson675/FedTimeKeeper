@@ -51,7 +51,7 @@
     <EmbeddedResource Update="Views\ScheduledLeaveView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="NavigationPageView.xaml">
+    <EmbeddedResource Update="Views\NavigationPageView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="ResourceDictionaries\DarkTheme.xaml">

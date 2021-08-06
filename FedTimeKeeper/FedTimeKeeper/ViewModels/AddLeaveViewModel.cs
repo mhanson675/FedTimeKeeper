@@ -108,7 +108,7 @@ namespace FedTimeKeeper.ViewModels
             };
 
             leaveService.SaveLeave(newLeave);
-            navigation.DisplayAlert("Leave Saved", $"{newLeave.Type} leave has been scheduled.", "Ok");
+            navigation.DisplayAlertMessage("Leave Saved", $"{newLeave.Type} leave has been scheduled.", "Ok");
             navigation.GoBack();
         }
         private string LeaveTypeToText(LeaveType leaveType)

@@ -31,7 +31,7 @@ namespace FedTimeKeeper
             var localDatabase = ServiceProvider.GetRequiredService<ILocalDatabase>();
             localDatabase.Initialize();
 
-            MainPage = new NavigationPage(new NavigationPageView(ServiceProvider.GetRequiredService<IScheduledLeaveService>(), ServiceProvider.GetRequiredService<ILeaveSummaryService>()));
+            MainPage = new NavigationPage(new NavigationPageView());
         }
 
         protected override void OnStart()
@@ -54,6 +54,7 @@ namespace FedTimeKeeper
             addPlatformServices?.Invoke(services);
 
             //TODO: Add Viewmodels
+            services.AddTransient<NavigationPageViewModel>();
             services.AddTransient<AddLeaveViewModel>();
             services.AddTransient<HomePageViewModel>();
             services.AddTransient<LeaveInformationViewModel>();

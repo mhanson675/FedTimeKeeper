@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewmodels="clr-namespace:FedTimeKeeper.ViewModels"
+             x:DataType="viewmodels:NavigationPageViewModel"
+             x:Class="FedTimeKeeper.Views.NavigationPageView">
+
+    <StackLayout>
+        <Button Text="Home Page" Margin="5" x:Name="HomePageButton" Command="{Binding HomePageButtonCommand}" ></Button>
+        <Button Text="View Leave Information" Margin="5" x:Name="ViewLeaveButton" Command="{Binding ViewLeaveInformationCommand}" ></Button>
+        <Button Text="Scheduled Leave" Margin="5" x:Name="ScheduledLeaveButton" Command="{Binding ScheduledLeaveCommand}"></Button>
+        <Button Text="Schedule New Leave" Margin="5" x:Name="AddLeaveButton" Command="{Binding ScheduleNewLeaveCommand}"></Button>
+        <Button Text="App Settings" Margin="5" x:Name="AppSettingsButton" Command="{Binding AppSettingsCommand}"></Button>
+    </StackLayout>
+</ContentPage>
