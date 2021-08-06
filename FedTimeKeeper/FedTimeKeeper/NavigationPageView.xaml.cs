@@ -1,4 +1,6 @@
-﻿using FedTimeKeeper.Views;
+﻿using FedTimeKeeper.Services.Interfaces;
+using FedTimeKeeper.Views;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +15,14 @@ namespace FedTimeKeeper
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class NavigationPageView : ContentPage
     {
-        public NavigationPageView()
+        private readonly IScheduledLeaveService leaveService;
+        private readonly ILeaveSummaryService leaveSummaryService;
+
+        public NavigationPageView(IScheduledLeaveService leaveService, ILeaveSummaryService leaveSummaryService)
         {
             InitializeComponent();
+            this.leaveService = leaveService;
+            this.leaveSummaryService = leaveSummaryService;
         }
 
         private async void HomePageButton_Clicked(object sender, EventArgs e)
@@ -25,17 +32,17 @@ namespace FedTimeKeeper
 
         private async void AddLeaveButton_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new AddLeavePageView());
+            await Navigation.PushAsync(new AddLeaveView());
         }
 
         private async void ViewLeaveButton_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new LeaveInformationPageView());
+            await Navigation.PushAsync(new LeaveInformationView(leaveSummaryService));
         }
 
         private async void ScheduledLeaveButton_Clicked(object sender, EventArgs e)
         {
-            await Navigation.PushAsync(new ScheduledLeavePageView());
+            await Navigation.PushAsync(new ScheduledLeaveView());
         }
 
         private async void AppSettingsButton_Clicked(object sender, EventArgs e)

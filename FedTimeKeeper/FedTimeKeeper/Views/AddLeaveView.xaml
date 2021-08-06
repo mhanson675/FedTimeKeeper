@@ -1,7 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="FedTimeKeeper.Views.AddLeavePageView"
+             xmlns:viewmodels="clr-namespace:FedTimeKeeper.ViewModels"
+             x:DataType="viewmodels:AddLeaveViewModel"
+             x:Class="FedTimeKeeper.Views.AddLeaveView"
              Title="Schedule a New Leave Period">
 
     <StackLayout>
@@ -9,25 +11,27 @@
             <Label Text="Leave Type" VerticalOptions="Center" />
             <Picker Title="Select Leave Type" VerticalOptions="Center"
                     x:Name="LeaveTypePicker"
-                    SelectedIndexChanged="LeaveTypePicker_SelectedIndexChanged">
+                    ItemsSource="{Binding LeaveTypes}"
+                    SelectedItem="{Binding SelectedLeaveType, Converter={StaticResource leaveToString}}">
             </Picker>
         </StackLayout>
 
         <StackLayout Orientation="Horizontal">
             <Label Text="Start Date:" VerticalOptions="Center" />
-            <DatePicker x:Name="StartDatePicker" DateSelected="StartDatePicker_DateSelected" VerticalOptions="Center" ></DatePicker>
+            <DatePicker x:Name="StartDatePicker" Date="{Binding StartDate}" VerticalOptions="Center" ></DatePicker>
         </StackLayout>
 
         <StackLayout Orientation="Horizontal">
             <Label Text="End Date:" VerticalOptions="Center" />
-            <DatePicker x:Name="EndDatePicker" DateSelected="EndDatePicker_DateSelected" VerticalOptions="Center"></DatePicker>
+            <DatePicker x:Name="EndDatePicker" Date="{Binding EndDate}" VerticalOptions="Center"></DatePicker>
         </StackLayout>
 
         <StackLayout Orientation="Horizontal">
             <Label Text="Hours Scheduled:" VerticalOptions="Center" />
-            <Entry x:Name="HoursTakenEntry" TextChanged="HoursTakenEntry_TextChanged" Keyboard="Numeric" VerticalOptions="Center" />
+            <Entry x:Name="HoursTakenEntry" Text="{Binding HoursTaken}" Keyboard="Numeric" VerticalOptions="Center" WidthRequest="50" />
         </StackLayout>
 
-        <Button Text="Save" x:Name="SaveButton" Clicked="SaveButton_Clicked" IsEnabled="False" />
+        <Button Text="Save" x:Name="SaveButton" Command="{Binding SaveLeaveCommand}" IsEnabled="False" />
+        <Button Text="Cancel" x:Name="CancelButton" Command="{Binding CancelCommand}" IsEnabled="True" />
     </StackLayout>
 </ContentPage>

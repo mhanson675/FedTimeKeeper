@@ -10,9 +10,27 @@
                 <ViewCell>
                     <ViewCell.View>
                         <StackLayout Orientation="Horizontal">
-                            <Label Text="Starting Leave Balance" VerticalOptions="Center"></Label>
-                            <Entry Keyboard="Numeric" Placeholder="Enter Starting Leave Balance" VerticalOptions="Center"
-                                   x:Name="StartLeaveBalanceEntry" TextChanged="StartLeaveBalanceEntry_TextChanged"></Entry>
+                            <Label Text="Starting Annual Leave Balance" VerticalOptions="Center"></Label>
+                            <Entry Keyboard="Numeric" Placeholder="Enter Starting Annual Leave Balance" VerticalOptions="Center"
+                                   x:Name="StartAnnualLeaveBalanceEntry" TextChanged="StartAnnualLeaveBalanceEntry_TextChanged"></Entry>
+                        </StackLayout>
+                    </ViewCell.View>
+                </ViewCell>
+                <ViewCell>
+                    <ViewCell.View>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Starting Sick Leave Balance" VerticalOptions="Center"></Label>
+                            <Entry Keyboard="Numeric" Placeholder="Enter Starting Sick Leave Balance" VerticalOptions="Center"
+                                   x:Name="StartSickLeaveBalanceEntry" TextChanged="StartSickLeaveBalanceEntry_TextChanged"></Entry>
+                        </StackLayout>
+                    </ViewCell.View>
+                </ViewCell>
+                <ViewCell>
+                    <ViewCell.View>
+                        <StackLayout Orientation="Horizontal">
+                            <Label Text="Starting Time-Off Award Balance" VerticalOptions="Center"></Label>
+                            <Entry Keyboard="Numeric" Placeholder="Enter Time-Off Award Balance" VerticalOptions="Center"
+                                   x:Name="StartTimeOffBalanceEntry" TextChanged="StartTimeOffBalanceEntry_TextChanged"></Entry>
                         </StackLayout>
                     </ViewCell.View>
                 </ViewCell>

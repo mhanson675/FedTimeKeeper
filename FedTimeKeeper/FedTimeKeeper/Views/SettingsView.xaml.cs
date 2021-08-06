@@ -28,19 +28,24 @@ namespace FedTimeKeeper.Views
 
         private void LoadCurrentSettings()
         {
-            LoadStartingBalance();
-            LoadLeaveCurrentLeaveRate();
+            LoadStartingBalances();
+            LoadCurrentLeaveRate();
             LoadFirstDate();
             LoadLastDate();
         }
 
-        private void LoadStartingBalance()
+        private void LoadStartingBalances()
         {
-            var startingBalance = double.Parse(Preferences.Get(startingLeaveKey, "0.0"));
-            StartLeaveBalanceEntry.Text = startingBalance.ToString();
+            var annualLeaveBalance = double.Parse(Preferences.Get(annualLeaveKey, "0.00"));
+            var sickLeaveBalance = double.Parse(Preferences.Get(sickLeaveKey, "0.00"));
+            var timeOffBalance = double.Parse(Preferences.Get(timeOffKey, "0.00"));
+
+            StartAnnualLeaveBalanceEntry.Text = annualLeaveBalance.ToString("F");
+            StartSickLeaveBalanceEntry.Text = sickLeaveBalance.ToString("F");
+            StartTimeOffBalanceEntry.Text = timeOffBalance.ToString("F");
         }
 
-        private void LoadLeaveCurrentLeaveRate()
+        private void LoadCurrentLeaveRate()
         {
             var leaveRate = int.Parse(Preferences.Get(leaveRateKey, "8"));
             var index = LeaveAccrualPicker.ItemsSource.IndexOf(leaveRate);
@@ -84,12 +89,28 @@ namespace FedTimeKeeper.Views
             Preferences.Set(lastDateKey, selectedDate);
         }
 
-        private void StartLeaveBalanceEntry_TextChanged(object sender, TextChangedEventArgs e)
+        private void StartAnnualLeaveBalanceEntry_TextChanged(object sender, TextChangedEventArgs e)
         {
             var entry = ((Entry)sender).Text;
             double.TryParse(entry, out double startingBalance);
 
-            Preferences.Set(startingLeaveKey, startingBalance);
+            Preferences.Set(annualLeaveKey, startingBalance);
+        }
+
+        private void StartSickLeaveBalanceEntry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var entry = ((Entry)sender).Text;
+            double.TryParse(entry, out double startingBalance);
+
+            Preferences.Set(sickLeaveKey, startingBalance);
+        }
+
+        private void StartTimeOffBalanceEntry_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            var entry = ((Entry)sender).Text;
+            double.TryParse(entry, out double startingBalance);
+
+            Preferences.Set(timeOffKey, startingBalance);
         }
     }
 }

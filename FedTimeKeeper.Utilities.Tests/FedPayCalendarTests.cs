@@ -40,7 +40,7 @@ namespace FedTimeKeeper.Utilities.Tests
         {
             var payCalendar = new FederalPayCalendar(firstPayPeriod, lastPayPeriod);
             var expectedPayPeriod = new FederalPayPeriod(lastPayPeriod, lastPayPeriod.AddDays(payPeriodLength - 1), periodsInTestYear);
-            var actualPPReturned = payCalendar.GetLastPayPeriod();
+            var actualPPReturned = payCalendar.GetFinalPayPeriod();
 
             Assert.Equal(expectedPayPeriod.StartDate, actualPPReturned.StartDate);
             Assert.Equal(expectedPayPeriod.EndDate, actualPPReturned.EndDate);

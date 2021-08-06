@@ -9,16 +9,15 @@ namespace FedTimeKeeper.Utilities
     public class FedAnnualLeaveCalculator
     {
         private int accrualRate;
-        private int startingBalance;
 
-        public FedAnnualLeaveCalculator(int startingBalance = 0, int accrualRate = 8)
+        public FedAnnualLeaveCalculator(int accrualRate = 8)
         {
-            this.startingBalance = startingBalance;
             this.accrualRate = accrualRate;
         }
-        public int PayPeriodEndingLeaveBalance(FederalPayPeriod payPeriod)
+
+        public double PayPeriodEndingLeaveBalance(FederalPayPeriod payPeriod)
         {
-            return payPeriod.Period * accrualRate + startingBalance;
+            return payPeriod.Period * accrualRate;
         }
     }
 }
