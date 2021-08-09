@@ -77,10 +77,10 @@
                 <BoxView Grid.Row="3" Grid.Column="3" Color="DarkGray" />
                 <BoxView Grid.Row="3" Grid.Column="4" Color="DarkGray" />
                 <Label Text="{Binding Annual.Type}" TextColor="Black" Grid.Row="3" Grid.Column="0"></Label>
-                <Label Text="{Binding Annual.BeginningBalance}" TextColor="Black" Grid.Row="3" Grid.Column="1"></Label>
-                <Label Text="{Binding Annual.Earned}" TextColor="Black" Grid.Row="3" Grid.Column="2"></Label>
-                <Label Text="{Binding Annual.Used}" TextColor="Black" Grid.Row="3" Grid.Column="3"></Label>
-                <Label Text="{Binding Annual.EndingBalance}" TextColor="Black" Grid.Row="3" Grid.Column="4"></Label>
+                <Label Text="{Binding Annual.BeginningBalance, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="3" Grid.Column="1"></Label>
+                <Label Text="{Binding Annual.Earned, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="3" Grid.Column="2"></Label>
+                <Label Text="{Binding Annual.Used, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="3" Grid.Column="3"></Label>
+                <Label Text="{Binding Annual.EndingBalance, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="3" Grid.Column="4"></Label>
 
                 <BoxView Grid.Row="4" Grid.Column="0" Color="DarkGray" />
                 <BoxView Grid.Row="4" Grid.Column="1" Color="DarkGray" />
@@ -91,33 +91,34 @@
                 <Label TextColor="Black" Grid.Row="4" Grid.Column="1">N/A</Label>
                 <Label TextColor="Black" Grid.Row="4" Grid.Column="2">N/A</Label>
                 <Label TextColor="Black" Grid.Row="4" Grid.Column="3">N/A</Label>
-                <Label Text="{Binding UseOrLose.EndingBalance}" TextColor="Black" Grid.Row="4" Grid.Column="4"></Label>
+                <Label Text="{Binding UseOrLose.EndingBalance, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="4" Grid.Column="4"></Label>
 
                 <BoxView Grid.Row="5" Grid.Column="0" Color="DarkGray" />
                 <BoxView Grid.Row="5" Grid.Column="1" Color="DarkGray" />
                 <BoxView Grid.Row="5" Grid.Column="2" Color="DarkGray" />
                 <BoxView Grid.Row="5" Grid.Column="3" Color="DarkGray" />
                 <BoxView Grid.Row="5" Grid.Column="4" Color="DarkGray" />
-                <Label Text="{Binding Sick.Type}" TextColor="Black" Grid.Row="5" Grid.Column="0"></Label>
-                <Label Text="{Binding Sick.BeginningBalance}" TextColor="Black" Grid.Row="5" Grid.Column="1"></Label>
-                <Label Text="{Binding Sick.Earned}" TextColor="Black" Grid.Row="5" Grid.Column="2"></Label>
-                <Label Text="{Binding Sick.Used}" TextColor="Black" Grid.Row="5" Grid.Column="3"></Label>
-                <Label Text="{Binding Sick.EndingBalance}" TextColor="Black" Grid.Row="5" Grid.Column="4"></Label>
+                <Label Text="{Binding Sick.Type, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="5" Grid.Column="0"></Label>
+                <Label Text="{Binding Sick.BeginningBalance, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="5" Grid.Column="1"></Label>
+                <Label Text="{Binding Sick.Earned, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="5" Grid.Column="2"></Label>
+                <Label Text="{Binding Sick.Used, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="5" Grid.Column="3"></Label>
+                <Label Text="{Binding Sick.EndingBalance, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="5" Grid.Column="4"></Label>
 
                 <BoxView Grid.Row="6" Grid.Column="0" Color="DarkGray" />
                 <BoxView Grid.Row="6" Grid.Column="1" Color="DarkGray" />
                 <BoxView Grid.Row="6" Grid.Column="2" Color="DarkGray" />
                 <BoxView Grid.Row="6" Grid.Column="3" Color="DarkGray" />
                 <BoxView Grid.Row="6" Grid.Column="4" Color="DarkGray" />
-                <Label Text="{Binding TimeOff.Type}" TextColor="Black" Grid.Row="6" Grid.Column="0"></Label>
-                <Label Text="{Binding TimeOff.BeginningBalance}" TextColor="Black" Grid.Row="6" Grid.Column="1"></Label>
-                <Label Text="{Binding TimeOff.Earned}" TextColor="Black" Grid.Row="6" Grid.Column="2"></Label>
-                <Label Text="{Binding TimeOff.Used}" TextColor="Black" Grid.Row="6" Grid.Column="3"></Label>
-                <Label Text="{Binding TimeOff.EndingBalance}" TextColor="Black" Grid.Row="6" Grid.Column="4"></Label>
+                <Label Text="{Binding TimeOff.Type, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="6" Grid.Column="0"></Label>
+                <Label Text="{Binding TimeOff.BeginningBalance, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="6" Grid.Column="1"></Label>
+                <Label Text="{Binding TimeOff.Earned, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="6" Grid.Column="2"></Label>
+                <Label Text="{Binding TimeOff.Used, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="6" Grid.Column="3"></Label>
+                <Label Text="{Binding TimeOff.EndingBalance, StringFormat='{0:F}'}" TextColor="Black" Grid.Row="6" Grid.Column="4"></Label>
             </Grid>
         </StackLayout>
 
-        <StackLayout Spacing="0" BackgroundColor="Black">
+        <!--TODO: Remove? -->
+        <!--<StackLayout Spacing="0" BackgroundColor="Black">
 
             <Grid BackgroundColor="Black">
                 <Grid.RowDefinitions>
@@ -139,7 +140,6 @@
 
                 <BoxView Grid.RowSpan="2" Grid.ColumnSpan="5" Color="DarkGray" />
                 <Label BackgroundColor="#4E3E32" TextColor="White" Grid.Row="0" Grid.ColumnSpan="5">Projected Leave Information</Label>
-                <!--<Label BackgroundColor="DarkGray" TextColor="Black" Grid.Row="1" Grid.ColumnSpan="5">As of Pay Period End Date: 07/17/21</Label>-->
                 <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="5">
                     <Label
                         Text="Projected at end of: "
@@ -210,6 +210,6 @@
                 <Label TextColor="Black" Grid.Row="6" Grid.Column="3">16.00</Label>
                 <Label TextColor="Black" Grid.Row="6" Grid.Column="4">16.00</Label>
             </Grid>
-        </StackLayout>
+        </StackLayout>-->
     </StackLayout>
 </ContentPage>
