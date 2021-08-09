@@ -8,6 +8,7 @@ using Xamarin.Forms;
 
 namespace FedTimeKeeper.ViewModels
 {
+    //TODO: Tighten up validation, HoursTaken can still be left blank somehow.
     public class AddLeaveViewModel : BaseViewModel
     {
         private const string TIMEOFF = "Time-off Award";
@@ -21,6 +22,7 @@ namespace FedTimeKeeper.ViewModels
 
         public ICommand SaveLeaveCommand => new Command(SaveLeave);
         public ICommand CancelCommand => new Command(Cancel);
+        public bool SaveButtonEnabled => IsValidLeave();
 
 
         private LeaveType selectedLeaveType;
@@ -31,7 +33,6 @@ namespace FedTimeKeeper.ViewModels
             {
                 selectedLeaveType = value;
                 OnPropertyChanged(nameof(SelectedLeaveType));
-                //LeaveTypeText = LeaveTypeToText(selectedLeaveType);
             }
         }
 
@@ -53,17 +54,8 @@ namespace FedTimeKeeper.ViewModels
             get => startDate;
             set
             {
-                if (value <= EndDate)
-                {
-                    startDate = value;
-                    OnPropertyChanged(nameof(StartDate));
-                }
-                else
-                {
-                    StartDate = startDate;
-                    OnPropertyChanged(nameof(StartDate));
-                    ThrowInvalidDateMessage();
-                }
+                startDate = ValidateStartDate(value);
+                OnPropertyChanged(nameof(StartDate));
             }
         }
 
@@ -73,17 +65,8 @@ namespace FedTimeKeeper.ViewModels
             get => endDate;
             set
             {
-                if (StartDate <= value)
-                {
-                    endDate = value;
-                    OnPropertyChanged(nameof(EndDate));
-                }
-                else
-                {
-                    EndDate = endDate;
-                    OnPropertyChanged(nameof(StartDate));
-                    ThrowInvalidDateMessage();
-                }
+                endDate = ValidateEndDate(value);
+                OnPropertyChanged(nameof(EndDate));
             }
         }
 
@@ -93,8 +76,9 @@ namespace FedTimeKeeper.ViewModels
             get => hoursTaken;
             set
             {
-                hoursTaken = value;
+                hoursTaken = ValidateHours(value);
                 OnPropertyChanged(nameof(HoursTaken));
+                OnPropertyChanged(nameof(SaveButtonEnabled));
             }
         }
 
@@ -106,8 +90,8 @@ namespace FedTimeKeeper.ViewModels
             LeaveTypes = new List<string> { ANNUAL, SICK, TIMEOFF };
             LeaveTypeText = string.Empty;
             SelectedLeaveType = new LeaveType();
-            EndDate = DateTime.Now;
-            StartDate = DateTime.Now;
+            EndDate = DateTime.Now.Date;
+            StartDate = DateTime.Now.Date;
         }
 
         private void Cancel(object obj)
@@ -130,9 +114,71 @@ namespace FedTimeKeeper.ViewModels
             navigation.GoBack();
         }
 
-        private void ThrowInvalidDateMessage()
+        private DateTime ValidateStartDate(DateTime dateEntered)
         {
-            navigation.DisplayAlertMessage("Invalid End Date", "The End Date must be on or after the Start Date.", "Ok");
+            if (dateEntered.Date <= EndDate.Date)
+            {
+                return dateEntered;
+            }
+            else
+            {
+                ThrowInvalidEntryMessage(nameof(StartDate));
+                return startDate;
+            }
+        }
+
+        private DateTime ValidateEndDate(DateTime dateEntered)
+        {
+            if (StartDate.Date <= dateEntered.Date)
+            {
+                return dateEntered;
+            }
+            else
+            {
+                ThrowInvalidEntryMessage(nameof(EndDate));
+                return endDate;
+            }
+        }
+
+        private double ValidateHours(double hoursEntered)
+        {
+            int days = endDate.Subtract(startDate).Days + 1;
+
+            int possibleHours = days * 8;
+
+            if (hoursEntered > possibleHours)
+            {
+                ThrowInvalidEntryMessage(nameof(HoursTaken));
+                return hoursTaken;
+            }
+            else
+            {
+                return hoursEntered;
+            }
+        }
+
+        private bool IsValidLeave()
+        {
+            return HoursTaken > 0;
+        }
+
+        private void ThrowInvalidEntryMessage(string entry)
+        {
+            switch (entry)
+            {
+                case "StartDate":
+                    navigation.DisplayAlertMessage("Invalid Start Date", "The Start Date must be on or before the End Date.", "Ok");
+                    break;
+                case "EndDate":
+                    navigation.DisplayAlertMessage("Invalid End Date", "The End Date must be on or after the Start Date.", "Ok");
+                    break;
+                case "HoursTaken":
+                    navigation.DisplayAlertMessage("Invalid Hours", "The Hours taken cannot exceed 8 hours per day.", "Ok");
+                    break;
+                default:
+                    navigation.DisplayAlertMessage("Invalid Entry", "You entered and invalid value.", "Ok");
+                    break;
+            }
         }
     }
 }

@@ -23,7 +23,7 @@
 
         <StackLayout Orientation="Horizontal">
             <Label Text="End Date:" VerticalOptions="Center" />
-            <DatePicker x:Name="EndDatePicker" Date="{Binding EndDate}" VerticalOptions="Center"></DatePicker>
+            <DatePicker x:Name="EndDatePicker" Date="{Binding EndDate}" VerticalOptions="Center" MinimumDate="{Binding StartDate}"></DatePicker>
         </StackLayout>
 
         <StackLayout Orientation="Horizontal">
@@ -31,7 +31,7 @@
             <Entry x:Name="HoursTakenEntry" Text="{Binding HoursTaken}" Keyboard="Numeric" VerticalOptions="Center" WidthRequest="50" />
         </StackLayout>
 
-        <Button Text="Save" x:Name="SaveButton" Command="{Binding SaveLeaveCommand}" IsEnabled="False" />
+        <Button Text="Save" x:Name="SaveButton" Command="{Binding SaveLeaveCommand}" IsEnabled="{Binding SaveButtonEnabled}" />
         <Button Text="Cancel" x:Name="CancelButton" Command="{Binding CancelCommand}" IsEnabled="True" />
     </StackLayout>
 </ContentPage>
