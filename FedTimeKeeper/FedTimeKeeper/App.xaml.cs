@@ -71,7 +71,7 @@ namespace FedTimeKeeper
             services.AddScoped<FedSickLeaveCalculator>();
             services.AddScoped(sp => new FederalPayCalendar(
                     sp.GetRequiredService<ISettingsService>().GetFirstPayPeriodStart(),
-                    sp.GetRequiredService<ISettingsService>().GetFirstPayPeriodStart()));
+                    sp.GetRequiredService<ISettingsService>().GetLastPayPeriodStart()));
             
             ServiceProvider = services.BuildServiceProvider();
         }
