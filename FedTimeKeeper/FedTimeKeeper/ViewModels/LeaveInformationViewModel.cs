@@ -11,8 +11,21 @@ namespace FedTimeKeeper.ViewModels
     public class LeaveInformationViewModel : BaseViewModel
     {
         private readonly INavigationService navigation;
+        private readonly FederalPayCalendar payCalendar;
         private readonly ILeaveSummaryService leaveSummaryService;
-        
+
+
+        private DateTime asOfDate;
+        public DateTime AsOfDate
+        {
+            get => asOfDate;
+            set
+            {
+                asOfDate = value;
+                OnPropertyChanged(nameof(AsOfDate));
+            }
+        }
+
         private LeaveSummary annual;
         public LeaveSummary Annual
         {
@@ -57,23 +70,27 @@ namespace FedTimeKeeper.ViewModels
             }
         }
 
-        public LeaveInformationViewModel(ILeaveSummaryService leaveSummaryService, INavigationService navigation)
+        public LeaveInformationViewModel(FederalPayCalendar payCalendar, ILeaveSummaryService leaveSummaryService, INavigationService navigation)
         {
+            this.payCalendar = payCalendar;
             this.leaveSummaryService = leaveSummaryService;
             this.navigation = navigation;
+
+            AsOfDate = payCalendar.GetPayPeriodEndDate(AsOfDate);
             Annual = new LeaveSummary();
             UseOrLose = new LeaveSummary();
             Sick = new LeaveSummary();
             TimeOff = new LeaveSummary();
+
             LoadData();
         }
 
         private void LoadData()
         {
-            Annual = leaveSummaryService.GetAnnualLeaveSummary();
-            UseOrLose = leaveSummaryService.GetUseOrLoseSummary();
-            Sick = leaveSummaryService.GetSickLeaveSummary();
-            TimeOff = leaveSummaryService.GetTimeOffAwardSummary();
+            Annual = leaveSummaryService.GetAnnualLeaveSummary(AsOfDate);
+            UseOrLose = leaveSummaryService.GetUseOrLoseSummary(AsOfDate);
+            Sick = leaveSummaryService.GetSickLeaveSummary(AsOfDate);
+            TimeOff = leaveSummaryService.GetTimeOffAwardSummary(AsOfDate);
         }
     }
 }

@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:FedTimeKeeper.ViewModels"
+             x:DataType="viewModels:LeaveInformationViewModel"
              x:Class="FedTimeKeeper.Views.LeaveInformationView"
              Title="Leave Information">
 
@@ -51,7 +53,7 @@
                         TextColor="Black">
                     </Label>
                     <Label
-                        Text="{Binding EndDate, StringFormat='{0:dd-MMM-yyyy}'}"
+                        Text="{Binding AsOfDate, StringFormat='{0:dd-MMM-yyyy}'}"
                         BackgroundColor="DarkGray"
                         TextColor="Black">
                     </Label>
@@ -106,7 +108,7 @@
                 <BoxView Grid.Row="6" Grid.Column="2" Color="DarkGray" />
                 <BoxView Grid.Row="6" Grid.Column="3" Color="DarkGray" />
                 <BoxView Grid.Row="6" Grid.Column="4" Color="DarkGray" />
-                <Label TextColor="Black" Grid.Row="6" Grid.Column="0">Time-off</Label>
+                <Label Text="{Binding TimeOff.Type}" TextColor="Black" Grid.Row="6" Grid.Column="0"></Label>
                 <Label Text="{Binding TimeOff.BeginningBalance}" TextColor="Black" Grid.Row="6" Grid.Column="1"></Label>
                 <Label Text="{Binding TimeOff.Earned}" TextColor="Black" Grid.Row="6" Grid.Column="2"></Label>
                 <Label Text="{Binding TimeOff.Used}" TextColor="Black" Grid.Row="6" Grid.Column="3"></Label>
