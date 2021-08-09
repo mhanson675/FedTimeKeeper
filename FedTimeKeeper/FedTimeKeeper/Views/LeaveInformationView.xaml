@@ -52,11 +52,12 @@
                         BackgroundColor="DarkGray"
                         TextColor="Black">
                     </Label>
-                    <Label
-                        Text="{Binding AsOfDate, StringFormat='{0:dd-MMM-yyyy}'}"
+                    <DatePicker
+                        Date="{Binding AsOfDate}"
+                        Format="dd-MMM-yyyy"
                         BackgroundColor="DarkGray"
                         TextColor="Black">
-                    </Label>
+                    </DatePicker>
                 </StackLayout>
 
                 <BoxView Grid.Row="2" Grid.Column="0" Color="DarkGray" />

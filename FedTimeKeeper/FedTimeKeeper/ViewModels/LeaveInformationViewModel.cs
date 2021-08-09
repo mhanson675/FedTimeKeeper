@@ -21,8 +21,10 @@ namespace FedTimeKeeper.ViewModels
             get => asOfDate;
             set
             {
-                asOfDate = value;
+                //asOfDate = value;
+                UpdateAsOfDate(value);
                 OnPropertyChanged(nameof(AsOfDate));
+                LoadData();
             }
         }
 
@@ -76,7 +78,7 @@ namespace FedTimeKeeper.ViewModels
             this.leaveSummaryService = leaveSummaryService;
             this.navigation = navigation;
 
-            AsOfDate = payCalendar.GetPayPeriodEndDate(AsOfDate);
+            AsOfDate = payCalendar.GetPayPeriodEndDate(DateTime.Today);
             Annual = new LeaveSummary();
             UseOrLose = new LeaveSummary();
             Sick = new LeaveSummary();
@@ -91,6 +93,11 @@ namespace FedTimeKeeper.ViewModels
             UseOrLose = leaveSummaryService.GetUseOrLoseSummary(AsOfDate);
             Sick = leaveSummaryService.GetSickLeaveSummary(AsOfDate);
             TimeOff = leaveSummaryService.GetTimeOffAwardSummary(AsOfDate);
+        }
+
+        private void UpdateAsOfDate(DateTime newDate)
+        {
+            asOfDate = payCalendar.GetPayPeriodEndDate(newDate);
         }
     }
 }
