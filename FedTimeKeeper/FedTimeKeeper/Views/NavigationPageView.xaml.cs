@@ -21,30 +21,5 @@ namespace FedTimeKeeper.Views
             InitializeComponent();
             BindingContext = App.GetViewModel<NavigationPageViewModel>();
         }
-
-        //private async void HomePageButton_Clicked(object sender, EventArgs e)
-        //{
-        //    await Navigation.PushAsync(new HomePageView());
-        //}
-
-        //private async void AddLeaveButton_Clicked(object sender, EventArgs e)
-        //{
-        //    await Navigation.PushAsync(new AddLeaveView());
-        //}
-
-        //private async void ViewLeaveButton_Clicked(object sender, EventArgs e)
-        //{
-        //    await Navigation.PushAsync(new LeaveInformationView(leaveSummaryService));
-        //}
-
-        //private async void ScheduledLeaveButton_Clicked(object sender, EventArgs e)
-        //{
-        //    await Navigation.PushAsync(new ScheduledLeaveView());
-        //}
-
-        //private async void AppSettingsButton_Clicked(object sender, EventArgs e)
-        //{
-        //    await Navigation.PushAsync(new SettingsView());
-        //}
     }
 }

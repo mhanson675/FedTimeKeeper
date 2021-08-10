@@ -9,51 +9,40 @@ namespace FedTimeKeeper.Services
 {
     public class SettingsService : ISettingsService
     {
-        public DateTime GetFirstPayPeriodStart()
+        public DateTime FirstPayPeriodStart
         {
-            var startDate = Preferences.Get(Constants.firstDateKey, Constants.DefaultFirstPayPeriodStart);
-            return startDate;
+            get => Preferences.Get(Constants.firstDateKey, Constants.DefaultFirstPayPeriodStart);
+            set => Preferences.Set(Constants.firstDateKey, value);
         }
 
-        public DateTime GetLastPayPeriodStart()
+        public DateTime LastPayPeriodStart
         {
-            var startDate = Preferences.Get(Constants.lastDateKey, Constants.DefaultFirstPayPeriodStart);
-            return startDate;
+            get => Preferences.Get(Constants.lastDateKey, Constants.DefaultLastPayPeriodStart);
+            set => Preferences.Set(Constants.lastDateKey, value);
         }
 
-        public int GetAccrualRate()
+        public int AccrualRate
         {
-            var accrualRate = Preferences.Get(Constants.leaveRateKey, Constants.DefaultLeaveAccrual);
-            return accrualRate;
+            get => Preferences.Get(Constants.leaveRateKey, Constants.DefaultLeaveAccrual);
+            set => Preferences.Set(Constants.leaveRateKey, value);
         }
 
-        public double GetAnnualLeaveStart()
+        public double AnnualLeaveStart
         {
-            return ParseLeave(Constants.annualLeaveKey);
+            get => Preferences.Get(Constants.annualLeaveKey, 0.0);
+            set => Preferences.Set(Constants.annualLeaveKey, value);
         }
 
-        public double GetSickLeaveStart()
+        public double SickLeaveStart
         {
-            return ParseLeave(Constants.sickLeaveKey);
+            get => Preferences.Get(Constants.sickLeaveKey, 0.0);
+            set => Preferences.Set(Constants.sickLeaveKey, value);
         }
 
-        public double GetTimeOffStart()
+        public double TimeOffStart
         {
-            return ParseLeave(Constants.timeOffKey);
-        }
-
-        private double ParseLeave(string leaveKey)
-        {
-            var savedLeave = Preferences.Get(leaveKey, "0.00");
-
-            if (double.TryParse(savedLeave, out double parsedLeave))
-            {
-                return parsedLeave;
-            }
-            else
-            {
-                return 0.0;
-            }
+            get => Preferences.Get(Constants.timeOffKey, 0.0);
+            set => Preferences.Set(Constants.timeOffKey, value);
         }
     }
 }

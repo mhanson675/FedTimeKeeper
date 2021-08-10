@@ -10,11 +10,14 @@ namespace FedTimeKeeper.ViewModels
     public class SettingsViewModel : BaseViewModel
     {
         private readonly ISettingsService settings;
-
+        
+        //TODO: Remove??
         public ICommand SaveCommand => new Command(OnSaveCommand);
 
-        private double startingAnnualBalance;
 
+        public List<int> LeaveAccrualRates { get; set; }
+
+        private double startingAnnualBalance;
         public double StartingAnnualBalance
         {
             get => startingAnnualBalance;
@@ -22,11 +25,11 @@ namespace FedTimeKeeper.ViewModels
             {
                 startingAnnualBalance = value;
                 OnPropertyChanged(nameof(StartingAnnualBalance));
+                settings.AnnualLeaveStart = StartingAnnualBalance;
             }
         }
 
         private double startingSickBalance;
-
         public double StartingSickBalance
         {
             get => startingSickBalance;
@@ -34,11 +37,11 @@ namespace FedTimeKeeper.ViewModels
             {
                 startingSickBalance = value;
                 OnPropertyChanged(nameof(StartingSickBalance));
+                settings.SickLeaveStart = StartingSickBalance;
             }
         }
 
         private double startingTimeOffBalance;
-
         public double StartingTimeOffBalance
         {
             get => startingTimeOffBalance;
@@ -46,11 +49,11 @@ namespace FedTimeKeeper.ViewModels
             {
                 startingTimeOffBalance = value;
                 OnPropertyChanged(nameof(StartingTimeOffBalance));
+                settings.TimeOffStart = StartingTimeOffBalance;
             }
         }
 
         private DateTime firstPayPeriodStartDate;
-
         public DateTime FirstPayPeriodStartDate
         {
             get => firstPayPeriodStartDate;
@@ -58,11 +61,11 @@ namespace FedTimeKeeper.ViewModels
             {
                 firstPayPeriodStartDate = value;
                 OnPropertyChanged(nameof(FirstPayPeriodStartDate));
+                settings.FirstPayPeriodStart = FirstPayPeriodStartDate;
             }
         }
 
         private DateTime lastPayPeriodStartDate;
-
         public DateTime LastPayPeriodStartDate
         {
             get => lastPayPeriodStartDate;
@@ -70,11 +73,11 @@ namespace FedTimeKeeper.ViewModels
             {
                 lastPayPeriodStartDate = value;
                 OnPropertyChanged(nameof(LastPayPeriodStartDate));
+                settings.LastPayPeriodStart = LastPayPeriodStartDate;
             }
         }
 
         private int leaveAccrualRate;
-
         public int LeaveAccrualRate
         {
             get => leaveAccrualRate;
@@ -82,25 +85,28 @@ namespace FedTimeKeeper.ViewModels
             {
                 leaveAccrualRate = value;
                 OnPropertyChanged(nameof(LeaveAccrualRate));
+                settings.AccrualRate = LeaveAccrualRate;
             }
         }
 
         public SettingsViewModel(ISettingsService settings)
         {
             this.settings = settings;
+            LeaveAccrualRates = new List<int> { 4, 6, 8 };
             LoadSettings();
         }
 
         private void LoadSettings()
         {
-            StartingAnnualBalance = settings.GetAnnualLeaveStart();
-            StartingSickBalance = settings.GetSickLeaveStart();
-            StartingTimeOffBalance = settings.GetTimeOffStart();
-            FirstPayPeriodStartDate = settings.GetFirstPayPeriodStart();
-            LastPayPeriodStartDate = settings.GetLastPayPeriodStart();
-            LeaveAccrualRate = settings.GetAccrualRate();
+            StartingAnnualBalance = settings.AnnualLeaveStart;
+            StartingSickBalance = settings.SickLeaveStart;
+            StartingTimeOffBalance = settings.TimeOffStart;
+            FirstPayPeriodStartDate = settings.FirstPayPeriodStart;
+            LastPayPeriodStartDate = settings.LastPayPeriodStart;
+            LeaveAccrualRate = settings.AccrualRate;
         }
 
+        //TODO: REMOVE??
         private void OnSaveCommand()
         {
         }

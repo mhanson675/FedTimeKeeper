@@ -11,5 +11,7 @@
         <Button Text="Scheduled Leave" Margin="5" x:Name="ScheduledLeaveButton" Command="{Binding ScheduledLeaveCommand}"></Button>
         <Button Text="Schedule New Leave" Margin="5" x:Name="AddLeaveButton" Command="{Binding ScheduleNewLeaveCommand}"></Button>
         <Button Text="App Settings" Margin="5" x:Name="AppSettingsButton" Command="{Binding AppSettingsCommand}"></Button>
+        <!--REMOVE-->
+        <Button Text="Clear Preferences" Margin="5" x:Name="ClearPrefsButton" Command="{Binding ClearPreferencesCommand}"></Button>
     </StackLayout>
 </ContentPage>

@@ -54,10 +54,10 @@ namespace FedTimeKeeper
             addPlatformServices?.Invoke(services);
 
             //TODO: Add Viewmodels
-            services.AddTransient<NavigationPageViewModel>();
             services.AddTransient<AddLeaveViewModel>();
             services.AddTransient<HomePageViewModel>();
             services.AddTransient<LeaveInformationViewModel>();
+            services.AddTransient<NavigationPageViewModel>();
             services.AddTransient<ScheduledLeaveViewModel>();
             services.AddTransient<SettingsViewModel>();
 
@@ -70,8 +70,8 @@ namespace FedTimeKeeper
             services.AddScoped<FedAnnualLeaveCalculator>();
             services.AddScoped<FedSickLeaveCalculator>();
             services.AddScoped(sp => new FederalPayCalendar(
-                    sp.GetRequiredService<ISettingsService>().GetFirstPayPeriodStart(),
-                    sp.GetRequiredService<ISettingsService>().GetLastPayPeriodStart()));
+                    sp.GetRequiredService<ISettingsService>().FirstPayPeriodStart,
+                    sp.GetRequiredService<ISettingsService>().LastPayPeriodStart));
             
             ServiceProvider = services.BuildServiceProvider();
         }

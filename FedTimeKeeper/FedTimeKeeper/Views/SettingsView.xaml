@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:FedTimeKeeper.ViewModels"
+             x:DataType="viewModels:SettingsViewModel"
              x:Class="FedTimeKeeper.Views.SettingsView"
              Title="App Settings">
 
@@ -12,7 +14,7 @@
                         <StackLayout Orientation="Horizontal">
                             <Label Text="Starting Annual Leave Balance" VerticalOptions="Center"></Label>
                             <Entry Keyboard="Numeric" Placeholder="Enter Starting Annual Leave Balance" VerticalOptions="Center"
-                                   x:Name="StartAnnualLeaveBalanceEntry" TextChanged="StartAnnualLeaveBalanceEntry_TextChanged"></Entry>
+                                   x:Name="StartAnnualLeaveBalanceEntry" Text="{Binding StartingAnnualBalance}"></Entry>
                         </StackLayout>
                     </ViewCell.View>
                 </ViewCell>
@@ -21,7 +23,7 @@
                         <StackLayout Orientation="Horizontal">
                             <Label Text="Starting Sick Leave Balance" VerticalOptions="Center"></Label>
                             <Entry Keyboard="Numeric" Placeholder="Enter Starting Sick Leave Balance" VerticalOptions="Center"
-                                   x:Name="StartSickLeaveBalanceEntry" TextChanged="StartSickLeaveBalanceEntry_TextChanged"></Entry>
+                                   x:Name="StartSickLeaveBalanceEntry" Text="{Binding StartingSickBalance}"></Entry>
                         </StackLayout>
                     </ViewCell.View>
                 </ViewCell>
@@ -30,7 +32,7 @@
                         <StackLayout Orientation="Horizontal">
                             <Label Text="Starting Time-Off Award Balance" VerticalOptions="Center"></Label>
                             <Entry Keyboard="Numeric" Placeholder="Enter Time-Off Award Balance" VerticalOptions="Center"
-                                   x:Name="StartTimeOffBalanceEntry" TextChanged="StartTimeOffBalanceEntry_TextChanged"></Entry>
+                                   x:Name="StartTimeOffBalanceEntry" Text="{Binding StartingTimeOffBalance}"></Entry>
                         </StackLayout>
                     </ViewCell.View>
                 </ViewCell>
@@ -38,7 +40,7 @@
                     <ViewCell.View>
                         <StackLayout Orientation="Horizontal">
                             <Label Text="Start of First Pay Period this Year"></Label>
-                            <DatePicker x:Name="FirstPayPeriodDatePicker" DateSelected="FirstPayPeriodDatePicker_DateSelected"></DatePicker>
+                            <DatePicker x:Name="FirstPayPeriodDatePicker" Date="{Binding FirstPayPeriodStartDate}"></DatePicker>
                         </StackLayout>
                     </ViewCell.View>
                 </ViewCell>
@@ -46,7 +48,7 @@
                     <ViewCell.View>
                         <StackLayout Orientation="Horizontal">
                             <Label Text="Start of Last Pay Period this Year"></Label>
-                            <DatePicker x:Name="LastPayPeriodDatePicker" DateSelected="LastPayPeriodDatePicker_DateSelected"></DatePicker>
+                            <DatePicker x:Name="LastPayPeriodDatePicker" Date="{Binding LastPayPeriodStartDate}"></DatePicker>
                         </StackLayout>
                     </ViewCell.View>
                 </ViewCell>
@@ -55,8 +57,8 @@
                         <StackLayout Orientation="Horizontal">
                             <Label Text="Leave Accrual Rate" />
                             <Picker Title="Current Leave Accrual Rate" x:Name="LeaveAccrualPicker"
-                                    SelectedIndexChanged="LeaveAccrualPicker_SelectedIndexChanged">
-                            </Picker>
+                                    ItemsSource="{Binding LeaveAccrualRates}"
+                                    SelectedItem="{Binding LeaveAccrualRate}"/>
                         </StackLayout>
                     </ViewCell.View>
                 </ViewCell>

@@ -32,7 +32,7 @@ namespace FedTimeKeeper.Services
             var currentPayPeriod = payCalendar.GetCurrentPayPeriod(asOfDate);
             var scheduledLeave = leaveService.GetPastScheduled(asOfDate);
 
-            annualLeaveSummary.BeginningBalance = settingsService.GetAnnualLeaveStart();
+            annualLeaveSummary.BeginningBalance = settingsService.AnnualLeaveStart;
             annualLeaveSummary.Earned = annualLeaveCalculator.PayPeriodEndingLeaveBalance(currentPayPeriod);
             annualLeaveSummary.Used = scheduledLeave.Where(sl => sl.Type == LeaveType.Annual).Sum(sl => sl.HoursTaken);
 
@@ -45,7 +45,7 @@ namespace FedTimeKeeper.Services
             var currentPayPeriod = payCalendar.GetCurrentPayPeriod(asOfDate);
             var scheduledLeave = leaveService.GetPastScheduled(asOfDate);
 
-            sickLeaveSummary.BeginningBalance = settingsService.GetSickLeaveStart();
+            sickLeaveSummary.BeginningBalance = settingsService.SickLeaveStart;
             sickLeaveSummary.Earned = sickLeaveCalculator.PayPeriodEndingLeaveBalance(currentPayPeriod);
             sickLeaveSummary.Used = scheduledLeave.Where(sl => sl.Type == LeaveType.Sick).Sum(sl => sl.HoursTaken);
 
@@ -58,7 +58,7 @@ namespace FedTimeKeeper.Services
             //var currentPayPeriod = payCalendar.GetCurrentPayPeriod(DateTime.Now);
             var scheduledLeave = leaveService.GetPastScheduled(asOfDate);
 
-            timeOffSummary.BeginningBalance = settingsService.GetTimeOffStart();
+            timeOffSummary.BeginningBalance = settingsService.TimeOffStart;
             timeOffSummary.Earned = 0.0;
             timeOffSummary.Used = scheduledLeave.Where(sl => sl.Type == LeaveType.Timeoff).Sum(sl => sl.HoursTaken);
 
@@ -76,7 +76,7 @@ namespace FedTimeKeeper.Services
             };
 
             var finalPayPeriod = payCalendar.GetFinalPayPeriod();
-            var startBalance = settingsService.GetAnnualLeaveStart();
+            var startBalance = settingsService.AnnualLeaveStart;
             var scheduledLeave = leaveService.GetPastScheduled(asOfDate);
             var leaveUsed = scheduledLeave.Where(sl => sl.Type == LeaveType.Annual).Sum(sl => sl.HoursTaken);
 

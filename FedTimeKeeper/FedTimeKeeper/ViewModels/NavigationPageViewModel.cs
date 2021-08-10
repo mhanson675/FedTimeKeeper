@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Windows.Input;
+using Xamarin.Essentials;
 using Xamarin.Forms;
 
 namespace FedTimeKeeper.ViewModels
@@ -17,6 +18,9 @@ namespace FedTimeKeeper.ViewModels
         public ICommand ScheduleNewLeaveCommand => new Command(ScheduleNewLeave);
         public ICommand ViewLeaveInformationCommand => new Command(ViewLeaveInformation);
         public ICommand AppSettingsCommand => new Command(AppSettings);
+        
+        //TODO: Remove??
+        public ICommand ClearPreferencesCommand => new Command(ClearPreferences);
 
         public NavigationPageViewModel(INavigationService navigation)
         {
@@ -46,6 +50,12 @@ namespace FedTimeKeeper.ViewModels
         private void AppSettings(object obj)
         {
             navigation.NavigateTo(ViewNames.SettingsView);
+        }
+
+        //TODO: Remove
+        private void ClearPreferences(object obj)
+        {
+            Preferences.Clear();
         }
     }
 }
