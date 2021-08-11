@@ -16,16 +16,15 @@ namespace FedTimeKeeper.ViewModels
         private readonly INavigationService navigation;
         private readonly IScheduledLeaveService leaveService;
 
-        private ObservableCollection<ScheduledLeave> leaves;
-
         public ICommand DeleteLeaveCommand => new Command<ScheduledLeave>(OnDeleteLeave);
-        //public ICommand LeaveSelectedCommand => new Command<ScheduledLeave>(OnLeaveSelected);
+
+        private ObservableCollection<ScheduledLeave> scheduledLeaves;
         public ObservableCollection<ScheduledLeave> ScheduledLeaves
         {
-            get => leaves;
+            get => scheduledLeaves;
             set
             {
-                leaves = value;
+                scheduledLeaves = value;
                 OnPropertyChanged(nameof(ScheduledLeaves));
             }
         }
@@ -35,17 +34,13 @@ namespace FedTimeKeeper.ViewModels
         {
             this.navigation = navigation;
             this.leaveService = leaveService;
-            ScheduledLeaves = new ObservableCollection<ScheduledLeave>();
-            leaves = new ObservableCollection<ScheduledLeave>(this.leaveService.GetAllScheduled());
+            ScheduledLeaves = new ObservableCollection<ScheduledLeave>(this.leaveService.GetAllScheduled());
         }
 
         private void OnDeleteLeave(ScheduledLeave leave)
         {
             leaveService.DeleteLeave(leave);
+            ScheduledLeaves.Remove(leave);
         }
-        //private void OnLeaveSelected(ScheduledLeave leave)
-        //{
-        //    navigation.NavigateTo(ViewNames.)
-        //}
     }
 }
