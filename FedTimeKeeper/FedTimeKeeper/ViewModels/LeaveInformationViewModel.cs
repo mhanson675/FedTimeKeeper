@@ -21,10 +21,21 @@ namespace FedTimeKeeper.ViewModels
             get => asOfDate;
             set
             {
-                //asOfDate = value;
-                UpdateAsOfDate(value);
+                asOfDate = value;
                 OnPropertyChanged(nameof(AsOfDate));
+                UpdateReportEndingDate(value);
                 LoadData();
+            }
+        }
+
+        private DateTime reportPayPeriodEndDate;
+        public DateTime ReportPayPeriodEndDate
+        {
+            get => reportPayPeriodEndDate;
+            set
+            {
+                reportPayPeriodEndDate = value;
+                OnPropertyChanged(nameof(ReportPayPeriodEndDate));
             }
         }
 
@@ -95,9 +106,9 @@ namespace FedTimeKeeper.ViewModels
             TimeOff = leaveSummaryService.GetTimeOffAwardSummary(AsOfDate);
         }
 
-        private void UpdateAsOfDate(DateTime newDate)
+        private void UpdateReportEndingDate(DateTime newDate)
         {
-            asOfDate = payCalendar.GetPayPeriodEndDate(newDate);
+            ReportPayPeriodEndDate = payCalendar.GetPreviousPayPeriod(newDate).EndDate;
         }
     }
 }

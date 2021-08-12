@@ -8,6 +8,13 @@
 
     <StackLayout Spacing="30">
 
+        <Label Text="Leave Information as of:"></Label>
+        <DatePicker
+            Date="{Binding AsOfDate}"
+            Format="dd-MMM-yyyy"
+            BackgroundColor="DarkGray"
+            TextColor="Black">
+        </DatePicker>
         <StackLayout Spacing="0">
             <Label BackgroundColor="#4E3E32" TextColor="White">Employee Information</Label>
             <Grid BackgroundColor="DarkGray">
@@ -48,16 +55,16 @@
                 <!--<Label BackgroundColor="DarkGray" TextColor="Black" Grid.Row="1" Grid.ColumnSpan="5">As of Pay Period End Date: 07/17/21</Label>-->
                 <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="5">
                     <Label
-                        Text="As of Pay Period End Date: "
+                        Text="{Binding ReportPayPeriodEndDate, StringFormat='As of Pay Period End Date: {0:dd-MMM-yyyy}'}"
                         BackgroundColor="DarkGray"
                         TextColor="Black">
                     </Label>
-                    <DatePicker
+                    <!--<DatePicker
                         Date="{Binding AsOfDate}"
                         Format="dd-MMM-yyyy"
                         BackgroundColor="DarkGray"
                         TextColor="Black">
-                    </DatePicker>
+                    </DatePicker>-->
                 </StackLayout>
 
                 <BoxView Grid.Row="2" Grid.Column="0" Color="DarkGray" />
