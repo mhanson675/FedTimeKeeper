@@ -34,13 +34,18 @@ namespace FedTimeKeeper.ViewModels
         {
             this.navigation = navigation;
             this.leaveService = leaveService;
-            ScheduledLeaves = new ObservableCollection<ScheduledLeave>(this.leaveService.GetAllScheduled());
+            LoadScheduledLeaves();
         }
 
         private void OnDeleteLeave(ScheduledLeave leave)
         {
             leaveService.DeleteLeave(leave);
-            ScheduledLeaves.Remove(leave);
+            LoadScheduledLeaves();
+        }
+
+        private void LoadScheduledLeaves()
+        {
+            ScheduledLeaves = new ObservableCollection<ScheduledLeave>(leaveService.GetAllScheduled());
         }
     }
 }

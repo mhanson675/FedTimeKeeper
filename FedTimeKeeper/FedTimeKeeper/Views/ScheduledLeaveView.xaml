@@ -2,16 +2,18 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:viewModels="clr-namespace:FedTimeKeeper.ViewModels"
+             xmlns:models="clr-namespace:FedTimeKeeper.Models"
              x:DataType="viewModels:ScheduledLeaveViewModel"
              x:Class="FedTimeKeeper.Views.ScheduledLeaveView"
              Title="Upcoming Scheduled Leave">
 
     <ListView x:Name="ScheduledLeaveListView" VerticalOptions="Fill" CachingStrategy="RecycleElement" ItemsSource="{Binding ScheduledLeaves}">
         <ListView.ItemTemplate>
-            <DataTemplate>
+            <DataTemplate x:DataType="models:ScheduledLeave">
                 <ViewCell>
                     <ViewCell.ContextActions>
-                        <MenuItem Command="{Binding Source={x:Reference ScheduledLeaveListView}, Path=BindingContext.DeleteLeaveCommand }"
+                        <MenuItem Command="{Binding Source={x:Reference ScheduledLeaveListView}, Path=BindingContext.DeleteLeaveCommand}"
+                                  IsDestructive="True"
                                   CommandParameter="{Binding .}" Text="Delete"/>
                     </ViewCell.ContextActions>
                     <Grid HeightRequest="10" Margin="5" RowSpacing="2">

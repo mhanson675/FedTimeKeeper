@@ -6,12 +6,12 @@
              x:Class="FedTimeKeeper.Views.NavigationPageView">
 
     <StackLayout>
-        <Button Text="Home Page" Margin="5" x:Name="HomePageButton" Command="{Binding HomePageButtonCommand}" ></Button>
+        <!--<Button Text="Home Page" Margin="5" x:Name="HomePageButton" Command="{Binding HomePageButtonCommand}" ></Button>-->
         <Button Text="View Leave Information" Margin="5" x:Name="ViewLeaveButton" Command="{Binding ViewLeaveInformationCommand}" ></Button>
         <Button Text="Scheduled Leave" Margin="5" x:Name="ScheduledLeaveButton" Command="{Binding ScheduledLeaveCommand}"></Button>
         <Button Text="Schedule New Leave" Margin="5" x:Name="AddLeaveButton" Command="{Binding ScheduleNewLeaveCommand}"></Button>
         <Button Text="App Settings" Margin="5" x:Name="AppSettingsButton" Command="{Binding AppSettingsCommand}"></Button>
         <!--REMOVE-->
-        <Button Text="Clear Preferences" Margin="5" x:Name="ClearPrefsButton" Command="{Binding ClearPreferencesCommand}"></Button>
+        <!--<Button Text="Clear Preferences" Margin="5" x:Name="ClearPrefsButton" Command="{Binding ClearPreferencesCommand}"></Button>-->
     </StackLayout>
 </ContentPage>
