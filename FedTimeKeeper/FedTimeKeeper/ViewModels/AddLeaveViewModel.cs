@@ -116,15 +116,12 @@ namespace FedTimeKeeper.ViewModels
 
         private DateTime ValidateStartDate(DateTime dateEntered)
         {
-            if (dateEntered.Date <= EndDate.Date)
+            if (dateEntered.Date > EndDate.Date)
             {
-                return dateEntered;
+                EndDate = dateEntered;
             }
-            else
-            {
-                ThrowInvalidEntryMessage(nameof(StartDate));
-                return startDate;
-            }
+
+            return dateEntered;
         }
 
         private DateTime ValidateEndDate(DateTime dateEntered)
