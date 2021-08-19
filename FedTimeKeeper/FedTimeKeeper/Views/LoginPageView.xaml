@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:viewModels="clr-namespace:FedTimeKeeper.ViewModels"
+             x:DataType="viewModels:LoginPageViewModel"
+             x:Class="FedTimeKeeper.Views.LoginPageView">
+
+    <StackLayout>
+        <Label Text="Welcome to the Fed Time Keeper" HorizontalOptions="Center"></Label>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="User Name:" VerticalOptions="Center"></Label>
+            <Entry Placeholder="Enter your user name" VerticalOptions="Center" Text="{Binding UserName}"></Entry>
+        </StackLayout>
+        <StackLayout Orientation="Horizontal">
+            <Label Text="Password" VerticalOptions="Center"></Label>
+            <Entry IsPassword="True" Placeholder="Enter your password" VerticalOptions="Center" Text="{Binding Password}"></Entry>
+        </StackLayout>
+        <Button Text="Login" Command="{Binding LoginCommand}"></Button>
+    </StackLayout>
+    
+</ContentPage>

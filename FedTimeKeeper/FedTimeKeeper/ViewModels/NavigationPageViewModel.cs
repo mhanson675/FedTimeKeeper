@@ -13,7 +13,7 @@ namespace FedTimeKeeper.ViewModels
     {
         private readonly INavigationService navigation;
 
-        public ICommand HomePageButtonCommand => new Command(HomePage);
+        public ICommand LoginButtonCommand => new Command(Login);
         public ICommand ScheduledLeaveCommand => new Command(ScheduledLeave);
         public ICommand ScheduleNewLeaveCommand => new Command(ScheduleNewLeave);
         public ICommand ViewLeaveInformationCommand => new Command(ViewLeaveInformation);
@@ -27,9 +27,9 @@ namespace FedTimeKeeper.ViewModels
             this.navigation = navigation;
         }
 
-        private void HomePage(object obj)
+        private void Login(object obj)
         {
-            navigation.NavigateTo(ViewNames.HomePageView);
+            navigation.NavigateTo(ViewNames.LoginPageView);
         }
 
         private void ScheduledLeave(object obj)

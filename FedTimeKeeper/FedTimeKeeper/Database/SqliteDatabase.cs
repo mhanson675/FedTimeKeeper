@@ -17,23 +17,15 @@ namespace FedTimeKeeper.Database
                 database = new SQLiteConnection(dbPath);
             }
 
-            database.CreateTable<ScheduledLeave>();
+            _ = database.CreateTable<ScheduledLeave>();
+            _ = database.CreateTable<User>();
         }
+
 
         public IEnumerable<ScheduledLeave> GetAllLeaves()
         {
             return database.Table<ScheduledLeave>().ToList();
         }
-
-        //public List<ScheduledLeave> GetUpcomingLeaves(DateTime date)
-        //{
-        //    return database.Table<ScheduledLeave>().Where(l => l.StartDate > date).OrderBy(l => l.StartDate).ToList();
-        //}
-
-        //public List<ScheduledLeave> GetTakenLeaves(DateTime date)
-        //{
-        //    return database.Table<ScheduledLeave>().Where(l => l.EndDate <= date).OrderBy(l => l.StartDate).ToList();
-        //}
 
         public int AddLeave(ScheduledLeave leave)
         {
@@ -53,6 +45,22 @@ namespace FedTimeKeeper.Database
         public int DeleteLeave(ScheduledLeave leave)
         {
             return database.Delete(leave);
+        }
+
+
+        public int CreateUser(User user)
+        {
+            return database.Insert(user);
+        }
+
+        public User GetUser()
+        {
+            return database.Table<User>().FirstOrDefault();
+        }
+
+        public int DeleteUser(User user)
+        {
+            return database.Delete(user);
         }
     }
 }

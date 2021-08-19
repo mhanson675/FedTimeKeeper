@@ -50,23 +50,24 @@ namespace FedTimeKeeper
         {
             var services = new ServiceCollection();
 
-            //TODO: Add Platform Specific Services
+            //Add Platform Specific Services
             addPlatformServices?.Invoke(services);
 
-            //TODO: Add Viewmodels
+            //Add Viewmodels
             services.AddTransient<AddLeaveViewModel>();
-            services.AddTransient<HomePageViewModel>();
+            services.AddTransient<LoginPageViewModel>();
             services.AddTransient<LeaveInformationViewModel>();
             services.AddTransient<NavigationPageViewModel>();
             services.AddTransient<ScheduledLeaveViewModel>();
             services.AddTransient<SettingsViewModel>();
 
-            //TODO: Add Core Services here
+            //Add Core Services
             services.AddSingleton<INavigationService, NavigationService>();
             services.AddSingleton<ILocalDatabase, SqliteDatabase>();
             services.AddScoped<ISettingsService, SettingsService>();
             services.AddScoped<IScheduledLeaveService, ScheduledLeaveService>();
             services.AddScoped<ILeaveSummaryService, LeaveSummaryService>();
+            services.AddScoped<IUserService, UserService>();
             services.AddScoped<FedAnnualLeaveCalculator>();
             services.AddScoped<FedSickLeaveCalculator>();
             services.AddScoped(sp => new FederalPayCalendar(
@@ -81,7 +82,7 @@ namespace FedTimeKeeper
             var navigationService = ServiceProvider.GetRequiredService<INavigationService>();
 
             navigationService.Configure(ViewNames.AddLeaveView, typeof(AddLeaveView));
-            navigationService.Configure(ViewNames.HomePageView, typeof(HomePageView));
+            navigationService.Configure(ViewNames.LoginPageView, typeof(LoginPageView));
             navigationService.Configure(ViewNames.LeaveInformationView, typeof(LeaveInformationView));
             navigationService.Configure(ViewNames.ScheduledLeaveView, typeof(ScheduledLeaveView));
             navigationService.Configure(ViewNames.SettingsView, typeof(SettingsView));

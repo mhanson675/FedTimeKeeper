@@ -21,6 +21,9 @@
     <Compile Update="Views\AddLeaveView.xaml.cs">
       <DependentUpon>AddLeaveView.xaml</DependentUpon>
     </Compile>
+    <Compile Update="Views\LoginPageView.xaml.cs">
+      <DependentUpon>LoginPageView.xaml</DependentUpon>
+    </Compile>
     <Compile Update="Views\LeaveInformationView.xaml.cs">
       <DependentUpon>LeaveInformationView.xaml</DependentUpon>
     </Compile>
@@ -39,7 +42,7 @@
     <EmbeddedResource Update="Views\AddLeaveView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Views\HomePageView.xaml">
+    <EmbeddedResource Update="Views\LoginPageView.xaml">
       <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
     </EmbeddedResource>
     <EmbeddedResource Update="Views\LeaveInformationView.xaml">
