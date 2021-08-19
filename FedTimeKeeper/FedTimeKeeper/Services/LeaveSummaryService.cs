@@ -29,11 +29,12 @@ namespace FedTimeKeeper.Services
         public LeaveSummary GetAnnualLeaveSummary(DateTime asOfDate)
         {
             var annualLeaveSummary = new LeaveSummary { Type = LeaveType.Annual };
-            var currentPayPeriod = payCalendar.GetCurrentPayPeriod(asOfDate);
+            //var currentPayPeriod = payCalendar.GetCurrentPayPeriod(asOfDate);
+            var lastPayPeriod = payCalendar.GetPreviousPayPeriod(asOfDate);
             var scheduledLeave = leaveService.GetPastScheduled(asOfDate);
 
             annualLeaveSummary.BeginningBalance = settingsService.AnnualLeaveStart;
-            annualLeaveSummary.Earned = annualLeaveCalculator.PayPeriodEndingLeaveBalance(currentPayPeriod);
+            annualLeaveSummary.Earned = annualLeaveCalculator.PayPeriodEndingLeaveBalance(lastPayPeriod);
             annualLeaveSummary.Used = scheduledLeave.Where(sl => sl.Type == LeaveType.Annual).Sum(sl => sl.HoursTaken);
 
             return annualLeaveSummary;
@@ -42,11 +43,12 @@ namespace FedTimeKeeper.Services
         public LeaveSummary GetSickLeaveSummary(DateTime asOfDate)
         {
             var sickLeaveSummary = new LeaveSummary { Type = LeaveType.Sick };
-            var currentPayPeriod = payCalendar.GetCurrentPayPeriod(asOfDate);
+            //var currentPayPeriod = payCalendar.GetCurrentPayPeriod(asOfDate);
+            var lastPayPeriod = payCalendar.GetPreviousPayPeriod(asOfDate);
             var scheduledLeave = leaveService.GetPastScheduled(asOfDate);
 
             sickLeaveSummary.BeginningBalance = settingsService.SickLeaveStart;
-            sickLeaveSummary.Earned = sickLeaveCalculator.PayPeriodEndingLeaveBalance(currentPayPeriod);
+            sickLeaveSummary.Earned = sickLeaveCalculator.PayPeriodEndingLeaveBalance(lastPayPeriod);
             sickLeaveSummary.Used = scheduledLeave.Where(sl => sl.Type == LeaveType.Sick).Sum(sl => sl.HoursTaken);
 
             return sickLeaveSummary;
