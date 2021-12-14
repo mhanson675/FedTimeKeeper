@@ -28,13 +28,16 @@ namespace FedTimeKeeper.Services
 
         public LeaveSummary GetAnnualLeaveSummary(DateTime asOfDate)
         {
-            var annualLeaveSummary = new LeaveSummary { Type = LeaveType.Annual };
-            //var currentPayPeriod = payCalendar.GetCurrentPayPeriod(asOfDate);
-            var lastPayPeriod = payCalendar.GetPreviousPayPeriod(asOfDate);
-            var scheduledLeave = leaveService.GetPastScheduled(asOfDate);
+            LeaveSummary annualLeaveSummary = new LeaveSummary { Type = LeaveType.Annual };
+            if (!payCalendar.TryGetPayPeriodForDate(asOfDate, out FederalPayPeriod currentPayPeriod))
+            {
+                throw new ArgumentOutOfRangeException(nameof(asOfDate), asOfDate, "Date does not exist in any current pay calendars.");
+            }
+            
+            IEnumerable<ScheduledLeave> scheduledLeave = leaveService.GetPastScheduled(asOfDate);
 
             annualLeaveSummary.BeginningBalance = settingsService.AnnualLeaveStart;
-            annualLeaveSummary.Earned = annualLeaveCalculator.PayPeriodEndingLeaveBalance(lastPayPeriod);
+            annualLeaveSummary.Earned = annualLeaveCalculator.PayPeriodEndingLeaveBalance(currentPayPeriod);
             annualLeaveSummary.Used = scheduledLeave.Where(sl => sl.Type == LeaveType.Annual).Sum(sl => sl.HoursTaken);
 
             return annualLeaveSummary;
@@ -42,13 +45,16 @@ namespace FedTimeKeeper.Services
 
         public LeaveSummary GetSickLeaveSummary(DateTime asOfDate)
         {
-            var sickLeaveSummary = new LeaveSummary { Type = LeaveType.Sick };
-            //var currentPayPeriod = payCalendar.GetCurrentPayPeriod(asOfDate);
-            var lastPayPeriod = payCalendar.GetPreviousPayPeriod(asOfDate);
-            var scheduledLeave = leaveService.GetPastScheduled(asOfDate);
+            LeaveSummary sickLeaveSummary = new LeaveSummary { Type = LeaveType.Sick };
+            if (!payCalendar.TryGetPayPeriodForDate(asOfDate, out FederalPayPeriod currentPayPeriod))
+            {
+                throw new ArgumentOutOfRangeException(nameof(asOfDate), asOfDate, "Date does not exist in any current pay calendars.");
+            }
+
+            IEnumerable<ScheduledLeave> scheduledLeave = leaveService.GetPastScheduled(asOfDate);
 
             sickLeaveSummary.BeginningBalance = settingsService.SickLeaveStart;
-            sickLeaveSummary.Earned = sickLeaveCalculator.PayPeriodEndingLeaveBalance(lastPayPeriod);
+            sickLeaveSummary.Earned = sickLeaveCalculator.PayPeriodEndingLeaveBalance(currentPayPeriod);
             sickLeaveSummary.Used = scheduledLeave.Where(sl => sl.Type == LeaveType.Sick).Sum(sl => sl.HoursTaken);
 
             return sickLeaveSummary;
@@ -56,9 +62,8 @@ namespace FedTimeKeeper.Services
 
         public LeaveSummary GetTimeOffAwardSummary(DateTime asOfDate)
         {
-            var timeOffSummary = new LeaveSummary { Type = LeaveType.Timeoff };
-            //var currentPayPeriod = payCalendar.GetCurrentPayPeriod(DateTime.Now);
-            var scheduledLeave = leaveService.GetPastScheduled(asOfDate);
+            LeaveSummary timeOffSummary = new LeaveSummary { Type = LeaveType.Timeoff };
+            IEnumerable<ScheduledLeave> scheduledLeave = leaveService.GetPastScheduled(asOfDate);
 
             timeOffSummary.BeginningBalance = settingsService.TimeOffStart;
             timeOffSummary.Earned = 0.0;
@@ -69,7 +74,7 @@ namespace FedTimeKeeper.Services
 
         public UseOrLoseSummary GetUseOrLoseSummary(DateTime asOfDate)
         {
-            var useOrLoseSummary = new UseOrLoseSummary
+            UseOrLoseSummary useOrLoseSummary = new UseOrLoseSummary
             {
                 Type = LeaveType.Annual,
                 BeginningBalance = 0.0,
@@ -77,14 +82,14 @@ namespace FedTimeKeeper.Services
                 Used = 0.0
             };
 
-            var finalPayPeriod = payCalendar.GetFinalPayPeriod();
-            var startBalance = settingsService.AnnualLeaveStart;
-            var scheduledLeave = leaveService.GetPastScheduled(asOfDate);
-            var leaveUsed = scheduledLeave.Where(sl => sl.Type == LeaveType.Annual).Sum(sl => sl.HoursTaken);
+            FederalPayPeriod finalPayPeriod = payCalendar.GetFinalPayPeriod();
+            double startBalance = settingsService.AnnualLeaveStart;
+            IEnumerable<ScheduledLeave> scheduledLeave = leaveService.GetPastScheduled(asOfDate);
+            double leaveUsed = scheduledLeave.Where(sl => sl.Type == LeaveType.Annual).Sum(sl => sl.HoursTaken);
 
-            var endOfYearBalance = annualLeaveCalculator.PayPeriodEndingLeaveBalance(finalPayPeriod);
+            double endOfYearBalance = annualLeaveCalculator.PayPeriodEndingLeaveBalance(finalPayPeriod);
 
-            var adjustedEndOfYearBalance = startBalance + endOfYearBalance - leaveUsed;
+            double adjustedEndOfYearBalance = startBalance + endOfYearBalance - leaveUsed;
 
             if (adjustedEndOfYearBalance >= Constants.MaxLeaveBalance)
             {

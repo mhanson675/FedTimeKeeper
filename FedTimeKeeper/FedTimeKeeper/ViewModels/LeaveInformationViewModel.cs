@@ -11,9 +11,20 @@ namespace FedTimeKeeper.ViewModels
     public class LeaveInformationViewModel : BaseViewModel
     {
         private readonly INavigationService navigation;
+        private readonly ISettingsService settingsService;
         private readonly FederalPayCalendar payCalendar;
         private readonly ILeaveSummaryService leaveSummaryService;
 
+        private DateTime firstDayOfPayYear;
+        public DateTime FirstDayOfPayYear
+        {
+            get => firstDayOfPayYear;
+            set
+            {
+                firstDayOfPayYear = value;
+                OnPropertyChanged(nameof(FirstDayOfPayYear));
+            }
+        }
 
         private DateTime asOfDate;
         public DateTime AsOfDate
@@ -83,32 +94,45 @@ namespace FedTimeKeeper.ViewModels
             }
         }
 
-        public LeaveInformationViewModel(FederalPayCalendar payCalendar, ILeaveSummaryService leaveSummaryService, INavigationService navigation)
+        public LeaveInformationViewModel(FederalPayCalendar payCalendar, ILeaveSummaryService leaveSummaryService, INavigationService navigation, ISettingsService settingsService)
         {
             this.payCalendar = payCalendar;
             this.leaveSummaryService = leaveSummaryService;
             this.navigation = navigation;
-
-            AsOfDate = payCalendar.GetPayPeriodEndDate(DateTime.Today);
+            this.settingsService = settingsService;
             Annual = new LeaveSummary();
             UseOrLose = new LeaveSummary();
             Sick = new LeaveSummary();
             TimeOff = new LeaveSummary();
+
+            FirstDayOfPayYear = settingsService.FirstPayPeriodStart.AddDays(14);
 
             LoadData();
         }
 
         private void LoadData()
         {
-            Annual = leaveSummaryService.GetAnnualLeaveSummary(AsOfDate);
-            UseOrLose = leaveSummaryService.GetUseOrLoseSummary(AsOfDate);
-            Sick = leaveSummaryService.GetSickLeaveSummary(AsOfDate);
-            TimeOff = leaveSummaryService.GetTimeOffAwardSummary(AsOfDate);
+            if (!payCalendar.TryGetPayPeriodForDate(DateTime.Today, out FederalPayPeriod currentPayPeriod))
+            {
+                throw new ArgumentOutOfRangeException(nameof(payCalendar), payCalendar, "The Pay Calendar does not encompass today's date.");
+            }
+
+            AsOfDate = currentPayPeriod.EndDate;
+            
+            Annual = leaveSummaryService.GetAnnualLeaveSummary(ReportPayPeriodEndDate);
+            UseOrLose = leaveSummaryService.GetUseOrLoseSummary(ReportPayPeriodEndDate);
+            Sick = leaveSummaryService.GetSickLeaveSummary(ReportPayPeriodEndDate);
+            TimeOff = leaveSummaryService.GetTimeOffAwardSummary(ReportPayPeriodEndDate);
         }
 
         private void UpdateReportEndingDate(DateTime newDate)
         {
-            ReportPayPeriodEndDate = payCalendar.GetPreviousPayPeriod(newDate).EndDate;
+            if (!payCalendar.TryGetPreviousPayPeriod(newDate, out FederalPayPeriod previoudPayPeriod))
+            {
+                return;
+            }
+
+            ReportPayPeriodEndDate = previoudPayPeriod.EndDate;
         }
     }
 }

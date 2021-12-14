@@ -48,12 +48,12 @@ namespace FedTimeKeeper
 
         private void SetupServices(Action<IServiceCollection> addPlatformServices = null)
         {
-            var services = new ServiceCollection();
+            ServiceCollection services = new ServiceCollection();
 
             //Add Platform Specific Services
             addPlatformServices?.Invoke(services);
 
-            //Add Viewmodels
+            //Add ViewModels
             services.AddTransient<AddLeaveViewModel>();
             services.AddTransient<LoginPageViewModel>();
             services.AddTransient<LeaveInformationViewModel>();
@@ -79,13 +79,18 @@ namespace FedTimeKeeper
 
         private void ConfigureNavigation()
         {
-            var navigationService = ServiceProvider.GetRequiredService<INavigationService>();
+            INavigationService navigationService = ServiceProvider.GetRequiredService<INavigationService>();
 
             navigationService.Configure(ViewNames.AddLeaveView, typeof(AddLeaveView));
             navigationService.Configure(ViewNames.LoginPageView, typeof(LoginPageView));
             navigationService.Configure(ViewNames.LeaveInformationView, typeof(LeaveInformationView));
             navigationService.Configure(ViewNames.ScheduledLeaveView, typeof(ScheduledLeaveView));
             navigationService.Configure(ViewNames.SettingsView, typeof(SettingsView));
+        }
+
+        private void LoadAppSettings()
+        {
+
         }
     }
 }
