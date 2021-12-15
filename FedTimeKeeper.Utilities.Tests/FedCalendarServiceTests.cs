@@ -25,7 +25,7 @@ namespace FedTimeKeeper.Utilities.Tests
         }
 
         [Theory]
-        [MemberData(nameof(GetTryGetPayCalendarData))]
+        [MemberData(nameof(GetTryGetPayCalendarSuccessData))]
         public void CalendarService_TryGetPayCalendar_Success(FederalPayCalendar expectedCalendar, DateTime tryDate)
         {
             _ = sut.TryGetPayCalendarForDate(tryDate, out FederalPayCalendar actualCalendar);
@@ -37,16 +37,16 @@ namespace FedTimeKeeper.Utilities.Tests
             Assert.Equal(expectedCalendar.NumberOfPayPeriods, actualCalendar.NumberOfPayPeriods);
         }
 
-        [Fact]
-        public void CalendarService_TryGetPayCalendar_Fails()
+        [Theory]
+        [MemberData(nameof(TryGetPayCalendarFailData))]
+        public void CalendarService_TryGetPayCalendar_Fails(DateTime tryDate)
         {
-            DateTime tryDate = new DateTime(2022, 01, 18);
             bool actual = sut.TryGetPayCalendarForDate(tryDate, out _);
 
             Assert.False(actual);
         }
 
-        public static TheoryData<FederalPayCalendar, DateTime> GetTryGetPayCalendarData()
+        public static TheoryData<FederalPayCalendar, DateTime> GetTryGetPayCalendarSuccessData()
         {
             FederalPayCalendar cy22 = new FederalPayCalendar(new DateTime(2022, 01, 02));
             FederalPayCalendar cy23 = new FederalPayCalendar(new DateTime(2023, 01, 01));
@@ -67,5 +67,13 @@ namespace FedTimeKeeper.Utilities.Tests
 
             return data;
         }
+
+        public static TheoryData<DateTime> TryGetPayCalendarFailData => new TheoryData<DateTime>
+        {
+            { new DateTime(2021,12,31) },
+            { new DateTime(2020,12,31) },
+            { new DateTime(2031,01,01) },
+            { new DateTime(2019,12,23) },
+        };
     }
 }
