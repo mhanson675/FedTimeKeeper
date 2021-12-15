@@ -8,7 +8,7 @@ namespace FedTimeKeeper.Utilities
     /// <para>
     /// An object modeling a standard Federal Pay Calendar Year, which generally consists of 26 Pay Periods.
     /// Each Pay Period begins on a Sunday and ends on a Saturday, covering a total of 14 days.
-    /// A Pay Year is typically 26 Pay periods, but may be 27 periods in years where the previous pay year ends on Saturday, December 31st.
+    /// A Pay Year typically has 26 Pay periods, but may have 27 periods in years where the previous pay year ends on Saturday, December 31st.
     /// </para>
     /// </summary>
     public class FederalPayCalendar
@@ -77,6 +77,10 @@ namespace FedTimeKeeper.Utilities
             //}
         }
 
+        /// <summary>
+        /// Constructs a new Pay Calendar using the given StartDate.
+        /// </summary>
+        /// <param name="startDate">The starting date for the Pay Calendar</param>
         public FederalPayCalendar(DateTime startDate)
         {
             if (startDate.DayOfWeek != DayOfWeek.Sunday)
@@ -147,9 +151,10 @@ namespace FedTimeKeeper.Utilities
                 payPeriod = null;
                 return false;
             }
+
             FederalPayPeriod currentPayPeriod = PayPeriods.FirstOrDefault(p => p.IncludesDate(date));
 
-            if (currentPayPeriod is null)
+            if (currentPayPeriod is null || currentPayPeriod.Period == 1)
             {
                 payPeriod = null;
                 return false;
@@ -165,7 +170,7 @@ namespace FedTimeKeeper.Utilities
         /// </summary>
         /// <param name="date">The date to check</param>
         /// <returns>True if the given date falls within the Pay Periods of the Pay Calendar; otherwise false.</returns>
-        public bool IncludesDate(DateTime date) => date >= StartDate && date <= EndDate;
+        public bool IncludesDate(DateTime date) => date.Date >= StartDate.Date && date.Date <= EndDate.Date;
 
 
         /// <summary>
