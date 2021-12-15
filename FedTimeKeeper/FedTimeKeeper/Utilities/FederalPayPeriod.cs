@@ -46,7 +46,7 @@ namespace FedTimeKeeper.Utilities
 
             if (payPeriod is < 1 or > 27)
             {
-                throw new ArgumentOutOfRangeException(nameof(payPeriod), payPeriod, "Pay Period must be greater than 1, and less than 27.");
+                throw new ArgumentOutOfRangeException(nameof(payPeriod), payPeriod, "Pay Period must be 1 or greater, and less than 27.");
             }
             Period = payPeriod;
         }
@@ -58,7 +58,7 @@ namespace FedTimeKeeper.Utilities
         /// <returns>True if the date falls within the Pay Period; otherwise false.</returns>
         public bool IncludesDate(DateTime dateToCheck)
         {
-            return StartDate <= dateToCheck && EndDate >= dateToCheck;
+            return StartDate.Date <= dateToCheck.Date && EndDate.Date >= dateToCheck.Date;
         }
 
         /// <summary>
