@@ -12,10 +12,11 @@ namespace FedTimeKeeper.ViewModels
     {
         private readonly INavigationService navigation;
         private readonly ISettingsService settingsService;
-        private readonly FederalPayCalendar payCalendar;
+        private readonly FederalCalendarService calendarService;
         private readonly ILeaveSummaryService leaveSummaryService;
 
         private DateTime firstDayOfPayYear;
+
         public DateTime FirstDayOfPayYear
         {
             get => firstDayOfPayYear;
@@ -27,6 +28,7 @@ namespace FedTimeKeeper.ViewModels
         }
 
         private DateTime asOfDate;
+
         public DateTime AsOfDate
         {
             get => asOfDate;
@@ -40,6 +42,7 @@ namespace FedTimeKeeper.ViewModels
         }
 
         private DateTime reportPayPeriodEndDate;
+
         public DateTime ReportPayPeriodEndDate
         {
             get => reportPayPeriodEndDate;
@@ -51,6 +54,7 @@ namespace FedTimeKeeper.ViewModels
         }
 
         private LeaveSummary annual;
+
         public LeaveSummary Annual
         {
             get => annual;
@@ -62,6 +66,7 @@ namespace FedTimeKeeper.ViewModels
         }
 
         private LeaveSummary useOrLose;
+
         public LeaveSummary UseOrLose
         {
             get => useOrLose;
@@ -73,6 +78,7 @@ namespace FedTimeKeeper.ViewModels
         }
 
         private LeaveSummary sick;
+
         public LeaveSummary Sick
         {
             get => sick;
@@ -84,6 +90,7 @@ namespace FedTimeKeeper.ViewModels
         }
 
         private LeaveSummary timeOff;
+
         public LeaveSummary TimeOff
         {
             get => timeOff;
@@ -94,9 +101,9 @@ namespace FedTimeKeeper.ViewModels
             }
         }
 
-        public LeaveInformationViewModel(FederalPayCalendar payCalendar, ILeaveSummaryService leaveSummaryService, INavigationService navigation, ISettingsService settingsService)
+        public LeaveInformationViewModel(FederalCalendarService calendarService, ILeaveSummaryService leaveSummaryService, INavigationService navigation, ISettingsService settingsService)
         {
-            this.payCalendar = payCalendar;
+            this.calendarService = calendarService;
             this.leaveSummaryService = leaveSummaryService;
             this.navigation = navigation;
             this.settingsService = settingsService;
@@ -112,13 +119,13 @@ namespace FedTimeKeeper.ViewModels
 
         private void LoadData()
         {
-            if (!payCalendar.TryGetPayPeriodForDate(DateTime.Today, out FederalPayPeriod currentPayPeriod))
+            if (!calendarService.TryGetPayPeriodForDate(DateTime.Today, out FederalPayPeriod currentPayPeriod))
             {
-                throw new ArgumentOutOfRangeException(nameof(payCalendar), payCalendar, "The Pay Calendar does not encompass today's date.");
+                throw new ArgumentOutOfRangeException(nameof(calendarService), calendarService, "The Pay Calendar does not encompass today's date.");
             }
 
             AsOfDate = currentPayPeriod.EndDate;
-            
+
             Annual = leaveSummaryService.GetAnnualLeaveSummary(ReportPayPeriodEndDate);
             UseOrLose = leaveSummaryService.GetUseOrLoseSummary(ReportPayPeriodEndDate);
             Sick = leaveSummaryService.GetSickLeaveSummary(ReportPayPeriodEndDate);
@@ -127,7 +134,7 @@ namespace FedTimeKeeper.ViewModels
 
         private void UpdateReportEndingDate(DateTime newDate)
         {
-            if (!payCalendar.TryGetPreviousPayPeriod(newDate, out FederalPayPeriod previoudPayPeriod))
+            if (!calendarService.TryGetPreviousPayPeriod(newDate, out FederalPayPeriod previoudPayPeriod))
             {
                 return;
             }
