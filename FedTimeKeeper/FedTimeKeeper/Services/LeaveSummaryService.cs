@@ -12,28 +12,28 @@ namespace FedTimeKeeper.Services
     {
         private readonly FedAnnualLeaveCalculator annualLeaveCalculator;
         private readonly FedSickLeaveCalculator sickLeaveCalculator;
-        private readonly FederalPayCalendar payCalendar;
+        private readonly FederalCalendarService calendarService;
         private readonly IScheduledLeaveService leaveService;
         private readonly ISettingsService settingsService;
 
         public LeaveSummaryService(ISettingsService settingsService, IScheduledLeaveService leaveService,
-            FedAnnualLeaveCalculator annualLeaveCalculator, FedSickLeaveCalculator sickLeaveCalculator, FederalPayCalendar payCalendar)
+            FedAnnualLeaveCalculator annualLeaveCalculator, FedSickLeaveCalculator sickLeaveCalculator, FederalCalendarService calendarService)
         {
             this.leaveService = leaveService;
             this.annualLeaveCalculator = annualLeaveCalculator;
             this.sickLeaveCalculator = sickLeaveCalculator;
-            this.payCalendar = payCalendar;
+            this.calendarService = calendarService;
             this.settingsService = settingsService;
         }
 
         public LeaveSummary GetAnnualLeaveSummary(DateTime asOfDate)
         {
             LeaveSummary annualLeaveSummary = new LeaveSummary { Type = LeaveType.Annual };
-            if (!payCalendar.TryGetPayPeriodForDate(asOfDate, out FederalPayPeriod currentPayPeriod))
+            if (!calendarService.TryGetPayPeriodForDate(asOfDate, out FederalPayPeriod currentPayPeriod))
             {
                 throw new ArgumentOutOfRangeException(nameof(asOfDate), asOfDate, "Date does not exist in any current pay calendars.");
             }
-            
+
             IEnumerable<ScheduledLeave> scheduledLeave = leaveService.GetPastScheduled(asOfDate);
 
             annualLeaveSummary.BeginningBalance = settingsService.AnnualLeaveStart;
@@ -46,7 +46,7 @@ namespace FedTimeKeeper.Services
         public LeaveSummary GetSickLeaveSummary(DateTime asOfDate)
         {
             LeaveSummary sickLeaveSummary = new LeaveSummary { Type = LeaveType.Sick };
-            if (!payCalendar.TryGetPayPeriodForDate(asOfDate, out FederalPayPeriod currentPayPeriod))
+            if (!calendarService.TryGetPayPeriodForDate(asOfDate, out FederalPayPeriod currentPayPeriod))
             {
                 throw new ArgumentOutOfRangeException(nameof(asOfDate), asOfDate, "Date does not exist in any current pay calendars.");
             }
@@ -82,7 +82,13 @@ namespace FedTimeKeeper.Services
                 Used = 0.0
             };
 
-            FederalPayPeriod finalPayPeriod = payCalendar.GetFinalPayPeriod();
+            if (!calendarService.TryGetPayCalendarForDate(asOfDate, out FederalPayCalendar currentCalendar))
+            {
+                throw new ArgumentOutOfRangeException(nameof(asOfDate), asOfDate, "Date does not exist in any current pay calendars.");
+            }
+
+            FederalPayPeriod finalPayPeriod = currentCalendar.GetFinalPayPeriod();
+
             double startBalance = settingsService.AnnualLeaveStart;
             IEnumerable<ScheduledLeave> scheduledLeave = leaveService.GetPastScheduled(asOfDate);
             double leaveUsed = scheduledLeave.Where(sl => sl.Type == LeaveType.Annual).Sum(sl => sl.HoursTaken);
@@ -98,6 +104,5 @@ namespace FedTimeKeeper.Services
 
             return useOrLoseSummary;
         }
-
     }
 }

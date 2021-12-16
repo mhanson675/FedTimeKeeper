@@ -10,9 +10,6 @@ namespace FedTimeKeeper.Utilities
     {
         private int accrualRate = 4;
 
-        public FedSickLeaveCalculator()
-        {
-        }
         public double PayPeriodEndingLeaveBalance(FederalPayPeriod payPeriod)
         {
             return payPeriod.Period * accrualRate;

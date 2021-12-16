@@ -14,7 +14,10 @@ namespace FedTimeKeeper
     public partial class App : Application
     {
         protected static IServiceProvider ServiceProvider { get; set; }
-        public enum Theme { Light, Dark }
+
+        public enum Theme
+        { Light, Dark }
+
         public static Theme AppTheme { get; set; }
 
         public static BaseViewModel GetViewModel<TViewModel>()
@@ -70,10 +73,11 @@ namespace FedTimeKeeper
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<FedAnnualLeaveCalculator>();
             services.AddScoped<FedSickLeaveCalculator>();
-            services.AddScoped(sp => new FederalPayCalendar(
-                    sp.GetRequiredService<ISettingsService>().FirstPayPeriodStart,
-                    sp.GetRequiredService<ISettingsService>().LastPayPeriodStart));
-            
+            //services.AddScoped(sp => new FederalPayCalendar(
+            //        sp.GetRequiredService<ISettingsService>().FirstPayPeriodStart,
+            //        sp.GetRequiredService<ISettingsService>().LastPayPeriodStart));
+            services.AddScoped<FederalCalendarService>();
+
             ServiceProvider = services.BuildServiceProvider();
         }
 
@@ -90,7 +94,6 @@ namespace FedTimeKeeper
 
         private void LoadAppSettings()
         {
-
         }
     }
 }
