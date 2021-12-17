@@ -35,7 +35,7 @@ namespace FedTimeKeeper.Utilities.Tests
         [MemberData(nameof(GetTryGetPayCalendarSuccessData))]
         public void CalendarService_TryGetPayCalendar_Success(FederalPayCalendar expectedCalendar, DateTime tryDate)
         {
-            _ = sut.TryGetPayCalendarForDate(tryDate, out FederalPayCalendar actualCalendar);
+            _ = sut.TryGetPayCalendarForDate(tryDate, out ICalendar actualCalendar);
 
             Assert.NotNull(actualCalendar);
             Assert.Equal(expectedCalendar.StartDate, actualCalendar.StartDate);

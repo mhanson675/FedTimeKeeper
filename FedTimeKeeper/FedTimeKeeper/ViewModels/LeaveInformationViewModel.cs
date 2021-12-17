@@ -109,26 +109,24 @@ namespace FedTimeKeeper.ViewModels
             UseOrLose = new LeaveSummary();
             Sick = new LeaveSummary();
             TimeOff = new LeaveSummary();
-            FirstDayOfPayYear = DateTime.Now;
-
-            LoadData();
+            AsOfDate = DateTime.Now;
         }
 
         private void LoadData()
         {
-            if (!calendarService.TryGetPayCalendarForDate(DateTime.Now, out FederalPayCalendar currentCalendar))
+            if (!calendarService.TryGetPayCalendarForDate(AsOfDate, out ICalendar currentCalendar))
             {
-                throw new ArgumentOutOfRangeException(nameof(calendarService), calendarService, "There is not Pay Calendar for today's date.");
+                throw new ArgumentOutOfRangeException(nameof(AsOfDate), AsOfDate, "There is no Pay Calendar for this date.");
             }
 
             FirstDayOfPayYear = currentCalendar.StartDate;
 
-            if (currentCalendar.TryGetPayPeriodForDate(DateTime.Now, out FederalPayPeriod currentPayPeriod))
+            if (!calendarService.TryGetPreviousPayPeriod(AsOfDate, out FederalPayPeriod previousPayPeriod))
             {
-                throw new ArgumentOutOfRangeException(nameof(calendarService), calendarService, "There is not Pay Calendar for today's date.");
+                throw new ArgumentOutOfRangeException(nameof(AsOfDate), AsOfDate, "Unable to get the previous pay period for this date.");
             }
 
-            AsOfDate = currentPayPeriod.EndDate;
+            ReportPayPeriodEndDate = previousPayPeriod.EndDate;
 
             Annual = leaveSummaryService.GetAnnualLeaveSummary(ReportPayPeriodEndDate);
             UseOrLose = leaveSummaryService.GetUseOrLoseSummary(ReportPayPeriodEndDate);
@@ -138,12 +136,12 @@ namespace FedTimeKeeper.ViewModels
 
         private void UpdateReportEndingDate(DateTime newDate)
         {
-            if (!calendarService.TryGetPreviousPayPeriod(newDate, out FederalPayPeriod previoudPayPeriod))
+            if (!calendarService.TryGetPreviousPayPeriod(newDate, out FederalPayPeriod previousPayPeriod))
             {
                 return;
             }
 
-            ReportPayPeriodEndDate = previoudPayPeriod.EndDate;
+            ReportPayPeriodEndDate = previousPayPeriod.EndDate;
         }
     }
 }

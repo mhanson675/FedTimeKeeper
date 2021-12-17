@@ -11,7 +11,7 @@ namespace FedTimeKeeper.Utilities
     /// A Pay Year typically has 26 Pay periods, but may have 27 periods in years where the previous pay year ends on Saturday, December 31st.
     /// </para>
     /// </summary>
-    public class FederalPayCalendar
+    public class FederalPayCalendar : ICalendar
     {
         private readonly List<FederalPayPeriod> payPeriods;
 

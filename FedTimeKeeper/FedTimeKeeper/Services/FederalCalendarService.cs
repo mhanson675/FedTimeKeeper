@@ -7,14 +7,14 @@ namespace FedTimeKeeper.Services
 {
     public class FederalCalendarService : IFederalCalendarService
     {
-        private readonly List<FederalPayCalendar> payCalendars;
+        private readonly List<ICalendar> payCalendars;
 
-        public IReadOnlyList<FederalPayCalendar> PayCalendars => payCalendars.AsReadOnly();
+        public IReadOnlyList<ICalendar> PayCalendars => payCalendars.AsReadOnly();
 
         public FederalCalendarService()
         {
             //TODO: Remove HardCoding
-            payCalendars = new List<FederalPayCalendar>
+            payCalendars = new List<ICalendar>
             {
                 new FederalPayCalendar(DateTime.Parse("2022-01-02")),
                 new FederalPayCalendar(DateTime.Parse("2023-01-01")),
@@ -24,7 +24,7 @@ namespace FedTimeKeeper.Services
             };
         }
 
-        public bool TryGetPayCalendarForDate(DateTime date, out FederalPayCalendar payCalendar)
+        public bool TryGetPayCalendarForDate(DateTime date, out ICalendar payCalendar)
         {
             payCalendar = payCalendars.FirstOrDefault(c => c.IncludesDate(date));
             return payCalendar != null;
@@ -32,7 +32,7 @@ namespace FedTimeKeeper.Services
 
         public bool TryGetPayPeriodForDate(DateTime date, out FederalPayPeriod payPeriod)
         {
-            if (!TryGetPayCalendarForDate(date, out FederalPayCalendar calendar))
+            if (!TryGetPayCalendarForDate(date, out ICalendar calendar))
             {
                 payPeriod = null;
                 return false;
@@ -43,7 +43,7 @@ namespace FedTimeKeeper.Services
 
         public bool TryGetPreviousPayPeriod(DateTime date, out FederalPayPeriod payPeriod)
         {
-            if (!TryGetPayCalendarForDate(date, out FederalPayCalendar calendar))
+            if (!TryGetPayCalendarForDate(date, out ICalendar calendar))
             {
                 payPeriod = null;
                 return false;

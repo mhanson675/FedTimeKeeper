@@ -79,7 +79,7 @@ namespace FedTimeKeeper.Services
                 Used = 0.0
             };
 
-            if (!calendarService.TryGetPayCalendarForDate(asOfDate, out FederalPayCalendar currentCalendar))
+            if (!calendarService.TryGetPayCalendarForDate(asOfDate, out ICalendar currentCalendar))
             {
                 throw new ArgumentOutOfRangeException(nameof(asOfDate), asOfDate, "Date does not exist in any current pay calendars.");
             }
