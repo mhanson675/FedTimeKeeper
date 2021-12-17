@@ -7,7 +7,7 @@ namespace FedTimeKeeper.Utilities
     /// <summary>
     /// Calculates Federal Leave balances based on Accrual Rate and a provided FederalPayPeriod.
     /// </summary>
-    public class FederalLeaveCalculator
+    public class FederalLeaveCalculator : IFederalLeaveCalculator
     {
         /// <summary>
         /// The Annual Leave Accrual Rate, varies based on Time in Service.
