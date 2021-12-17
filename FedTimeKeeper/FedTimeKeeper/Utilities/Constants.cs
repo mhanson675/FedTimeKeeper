@@ -5,6 +5,9 @@ using System.Text;
 
 namespace FedTimeKeeper.Utilities
 {
+    /// <summary>
+    /// Constants used throughout the app
+    /// </summary>
     public static class Constants
     {
         public const string DatabaseFileName = "FedLeave.db3";
@@ -27,7 +30,5 @@ namespace FedTimeKeeper.Utilities
         public const string sickLeaveKey = "StartSickBalance";
         public const string timeOffKey = "StartTimeOffBalance";
         public const string leaveRateKey = "LeaveAccrualRate";
-        public const string firstDateKey = "FirstStartDate";
-        public const string lastDateKey = "LastStartDate";
     }
 }
