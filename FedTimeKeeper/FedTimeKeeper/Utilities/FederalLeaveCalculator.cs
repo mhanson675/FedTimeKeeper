@@ -19,21 +19,41 @@ namespace FedTimeKeeper.Utilities
         /// </summary>
         public int SickLeaveAccrualRate => 4;
 
+        /// <summary>
+        /// Creates an Instance of <see cref="FederalLeaveCalculator"/> with the given Annual Leave Accrual Rate.
+        /// </summary>
+        /// <param name="leaveAccrualRate">The Annual Leave Accrual Rate per pay period.</param>
         public FederalLeaveCalculator(int leaveAccrualRate)
         {
             LeaveAccrualRate = leaveAccrualRate;
         }
 
+        /// <summary>
+        /// Returns the unadjusted ending leave balance based on accrual rate and the given pay period.
+        /// </summary>
+        /// <param name="period">The pay period to use for calculating the leave balance</param>
+        /// <returns>The Leave Balance</returns>
         public int EndingLeaveBalance(FederalPayPeriod period)
         {
             return period.Period * LeaveAccrualRate;
         }
 
+        /// <summary>
+        /// Returns the unadjusted ending sick leave balance based on accrual rate and the given pay period.
+        /// </summary>
+        /// <param name="period">The pay period to use for calculating the sick leave balance</param>
+        /// <returns>The Sick Leave Balance</returns>
         public int EndingSickLeaveBalance(FederalPayPeriod period)
         {
             return period.Period * SickLeaveAccrualRate;
         }
 
+
+        /// <summary>
+        /// Returns both the ending Annual Leave and Sick Leave balance for the given pay period, as a (int, int) tuple.
+        /// </summary>
+        /// <param name="period">The pay period to user for calculating the leave balances.</param>
+        /// <returns>A (int, int) tuple, with the Annual Leave as the first int, and the Sick Leave as the last int.</returns>
         public (int Annual, int Sick) EndingBalances(FederalPayPeriod period)
         {
             return (EndingLeaveBalance(period), EndingSickLeaveBalance(period));
