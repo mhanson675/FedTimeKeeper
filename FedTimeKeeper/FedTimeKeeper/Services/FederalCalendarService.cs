@@ -5,7 +5,7 @@ using FedTimeKeeper.Utilities;
 
 namespace FedTimeKeeper.Services
 {
-    public class FederalCalendarService
+    public class FederalCalendarService : IFederalCalendarService
     {
         private readonly List<FederalPayCalendar> payCalendars;
 
