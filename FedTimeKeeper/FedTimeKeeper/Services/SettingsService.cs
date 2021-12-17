@@ -9,18 +9,6 @@ namespace FedTimeKeeper.Services
 {
     public class SettingsService : ISettingsService
     {
-        public DateTime FirstPayPeriodStart
-        {
-            get => Preferences.Get(Constants.firstDateKey, Constants.DefaultFirstPayPeriodStart);
-            set => Preferences.Set(Constants.firstDateKey, value);
-        }
-
-        public DateTime LastPayPeriodStart
-        {
-            get => Preferences.Get(Constants.lastDateKey, Constants.DefaultLastPayPeriodStart);
-            set => Preferences.Set(Constants.lastDateKey, value);
-        }
-
         public int AccrualRate
         {
             get => Preferences.Get(Constants.leaveRateKey, Constants.DefaultLeaveAccrual);

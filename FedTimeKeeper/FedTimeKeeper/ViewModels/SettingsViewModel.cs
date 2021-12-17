@@ -53,30 +53,6 @@ namespace FedTimeKeeper.ViewModels
             }
         }
 
-        private DateTime firstPayPeriodStartDate;
-        public DateTime FirstPayPeriodStartDate
-        {
-            get => firstPayPeriodStartDate;
-            set
-            {
-                firstPayPeriodStartDate = value;
-                OnPropertyChanged(nameof(FirstPayPeriodStartDate));
-                settings.FirstPayPeriodStart = FirstPayPeriodStartDate;
-            }
-        }
-
-        private DateTime lastPayPeriodStartDate;
-        public DateTime LastPayPeriodStartDate
-        {
-            get => lastPayPeriodStartDate;
-            set
-            {
-                lastPayPeriodStartDate = value;
-                OnPropertyChanged(nameof(LastPayPeriodStartDate));
-                settings.LastPayPeriodStart = LastPayPeriodStartDate;
-            }
-        }
-
         private int leaveAccrualRate;
         public int LeaveAccrualRate
         {
@@ -101,8 +77,6 @@ namespace FedTimeKeeper.ViewModels
             StartingAnnualBalance = settings.AnnualLeaveStart;
             StartingSickBalance = settings.SickLeaveStart;
             StartingTimeOffBalance = settings.TimeOffStart;
-            FirstPayPeriodStartDate = settings.FirstPayPeriodStart;
-            LastPayPeriodStartDate = settings.LastPayPeriodStart;
             LeaveAccrualRate = settings.AccrualRate;
         }
 

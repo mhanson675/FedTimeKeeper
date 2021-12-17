@@ -53,19 +53,12 @@
 
                 <BoxView Grid.RowSpan="2" Grid.ColumnSpan="5" Color="DarkGray" />
                 <Label BackgroundColor="#4E3E32" TextColor="White" Grid.Row="0" Grid.ColumnSpan="5">Current Leave Information</Label>
-                <!--<Label BackgroundColor="DarkGray" TextColor="Black" Grid.Row="1" Grid.ColumnSpan="5">As of Pay Period End Date: 07/17/21</Label>-->
                 <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="5">
                     <Label
                         Text="{Binding ReportPayPeriodEndDate, StringFormat='As of Pay Period End Date: {0:dd-MMM-yyyy}'}"
                         BackgroundColor="DarkGray"
                         TextColor="Black">
                     </Label>
-                    <!--<DatePicker
-                        Date="{Binding AsOfDate}"
-                        Format="dd-MMM-yyyy"
-                        BackgroundColor="DarkGray"
-                        TextColor="Black">
-                    </DatePicker>-->
                 </StackLayout>
 
                 <BoxView Grid.Row="2" Grid.Column="0" Color="DarkGray" />
@@ -125,99 +118,5 @@
             </Grid>
         </StackLayout>
 
-        <!--TODO: Remove? -->
-        <!--<StackLayout Spacing="0" BackgroundColor="Black">
-
-            <Grid BackgroundColor="Black">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-
-                <BoxView Grid.RowSpan="2" Grid.ColumnSpan="5" Color="DarkGray" />
-                <Label BackgroundColor="#4E3E32" TextColor="White" Grid.Row="0" Grid.ColumnSpan="5">Projected Leave Information</Label>
-                <StackLayout Orientation="Horizontal" Grid.Row="1" Grid.ColumnSpan="5">
-                    <Label
-                        Text="Projected at end of: "
-                        BackgroundColor="DarkGray"
-                        TextColor="Black"
-                        VerticalOptions="Center">
-                    </Label>
-                    <DatePicker
-                        BackgroundColor="DarkGray"
-                        TextColor="Black"
-                        FontSize="Small"
-                        VerticalOptions="Center">
-                    </DatePicker>
-                </StackLayout>
-
-                <BoxView Grid.Row="2" Grid.Column="0" Color="DarkGray" />
-                <BoxView Grid.Row="2" Grid.Column="1" Color="DarkGray" />
-                <BoxView Grid.Row="2" Grid.Column="2" Color="DarkGray" />
-                <BoxView Grid.Row="2" Grid.Column="3" Color="DarkGray" />
-                <BoxView Grid.Row="2" Grid.Column="4" Color="DarkGray" />
-                <Label TextColor="Black" Grid.Row="2" Grid.Column="0">Type</Label>
-                <Label TextColor="Black" Grid.Row="2" Grid.Column="1">Beginning Balance</Label>
-                <Label TextColor="Black" Grid.Row="2" Grid.Column="2">Earned YTD</Label>
-                <Label TextColor="Black" Grid.Row="2" Grid.Column="3">Used YTD</Label>
-                <Label TextColor="Black" Grid.Row="2" Grid.Column="4">Ending Balance</Label>
-
-                <BoxView Grid.Row="3" Grid.Column="0" Color="DarkGray" />
-                <BoxView Grid.Row="3" Grid.Column="1" Color="DarkGray" />
-                <BoxView Grid.Row="3" Grid.Column="2" Color="DarkGray" />
-                <BoxView Grid.Row="3" Grid.Column="3" Color="DarkGray" />
-                <BoxView Grid.Row="3" Grid.Column="4" Color="DarkGray" />
-                <Label TextColor="Black" Grid.Row="3" Grid.Column="0">Annual</Label>
-                <Label TextColor="Black" Grid.Row="3" Grid.Column="1">203.00</Label>
-                <Label TextColor="Black" Grid.Row="3" Grid.Column="2">112.00</Label>
-                <Label TextColor="Black" Grid.Row="3" Grid.Column="3">28.00</Label>
-                <Label TextColor="Black" Grid.Row="3" Grid.Column="4">287.00</Label>
-
-                <BoxView Grid.Row="4" Grid.Column="0" Color="DarkGray" />
-                <BoxView Grid.Row="4" Grid.Column="1" Color="DarkGray" />
-                <BoxView Grid.Row="4" Grid.Column="2" Color="DarkGray" />
-                <BoxView Grid.Row="4" Grid.Column="3" Color="DarkGray" />
-                <BoxView Grid.Row="4" Grid.Column="4" Color="DarkGray" />
-                <Label TextColor="Black" Grid.Row="4" Grid.Column="0">Annual, Use or Lose</Label>
-                <Label TextColor="Black" Grid.Row="4" Grid.Column="1">N/A</Label>
-                <Label TextColor="Black" Grid.Row="4" Grid.Column="2">N/A</Label>
-                <Label TextColor="Black" Grid.Row="4" Grid.Column="3">N/A</Label>
-                <Label TextColor="Black" Grid.Row="4" Grid.Column="4">143.00</Label>
-
-                <BoxView Grid.Row="5" Grid.Column="0" Color="DarkGray" />
-                <BoxView Grid.Row="5" Grid.Column="1" Color="DarkGray" />
-                <BoxView Grid.Row="5" Grid.Column="2" Color="DarkGray" />
-                <BoxView Grid.Row="5" Grid.Column="3" Color="DarkGray" />
-                <BoxView Grid.Row="5" Grid.Column="4" Color="DarkGray" />
-                <Label TextColor="Black" Grid.Row="5" Grid.Column="0">Sick</Label>
-                <Label TextColor="Black" Grid.Row="5" Grid.Column="1">112.00</Label>
-                <Label TextColor="Black" Grid.Row="5" Grid.Column="2">56.00</Label>
-                <Label TextColor="Black" Grid.Row="5" Grid.Column="3">16.00</Label>
-                <Label TextColor="Black" Grid.Row="5" Grid.Column="4">152.00</Label>
-
-                <BoxView Grid.Row="6" Grid.Column="0" Color="DarkGray" />
-                <BoxView Grid.Row="6" Grid.Column="1" Color="DarkGray" />
-                <BoxView Grid.Row="6" Grid.Column="2" Color="DarkGray" />
-                <BoxView Grid.Row="6" Grid.Column="3" Color="DarkGray" />
-                <BoxView Grid.Row="6" Grid.Column="4" Color="DarkGray" />
-                <Label TextColor="Black" Grid.Row="6" Grid.Column="0">Time-off</Label>
-                <Label TextColor="Black" Grid.Row="6" Grid.Column="1">32.00</Label>
-                <Label TextColor="Black" Grid.Row="6" Grid.Column="2">32.00</Label>
-                <Label TextColor="Black" Grid.Row="6" Grid.Column="3">16.00</Label>
-                <Label TextColor="Black" Grid.Row="6" Grid.Column="4">16.00</Label>
-            </Grid>
-        </StackLayout>-->
     </StackLayout>
 </ContentPage>

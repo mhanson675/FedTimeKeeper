@@ -111,17 +111,23 @@ namespace FedTimeKeeper.ViewModels
             UseOrLose = new LeaveSummary();
             Sick = new LeaveSummary();
             TimeOff = new LeaveSummary();
-
-            FirstDayOfPayYear = settingsService.FirstPayPeriodStart.AddDays(14);
+            FirstDayOfPayYear = DateTime.Now;
 
             LoadData();
         }
 
         private void LoadData()
         {
-            if (!calendarService.TryGetPayPeriodForDate(DateTime.Today, out FederalPayPeriod currentPayPeriod))
+            if (!calendarService.TryGetPayCalendarForDate(DateTime.Now, out FederalPayCalendar currentCalendar))
             {
-                throw new ArgumentOutOfRangeException(nameof(calendarService), calendarService, "The Pay Calendar does not encompass today's date.");
+                throw new ArgumentOutOfRangeException(nameof(calendarService), calendarService, "There is not Pay Calendar for today's date.");
+            }
+
+            FirstDayOfPayYear = currentCalendar.StartDate;
+
+            if (currentCalendar.TryGetPayPeriodForDate(DateTime.Now, out FederalPayPeriod currentPayPeriod))
+            {
+                throw new ArgumentOutOfRangeException(nameof(calendarService), calendarService, "There is not Pay Calendar for today's date.");
             }
 
             AsOfDate = currentPayPeriod.EndDate;

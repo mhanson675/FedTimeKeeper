@@ -39,22 +39,6 @@
                 <ViewCell>
                     <ViewCell.View>
                         <StackLayout Orientation="Horizontal">
-                            <Label Text="Start of First Pay Period this Year"></Label>
-                            <DatePicker x:Name="FirstPayPeriodDatePicker" Date="{Binding FirstPayPeriodStartDate}"></DatePicker>
-                        </StackLayout>
-                    </ViewCell.View>
-                </ViewCell>
-                <ViewCell>
-                    <ViewCell.View>
-                        <StackLayout Orientation="Horizontal">
-                            <Label Text="Start of Last Pay Period this Year"></Label>
-                            <DatePicker x:Name="LastPayPeriodDatePicker" Date="{Binding LastPayPeriodStartDate}"></DatePicker>
-                        </StackLayout>
-                    </ViewCell.View>
-                </ViewCell>
-                <ViewCell>
-                    <ViewCell.View>
-                        <StackLayout Orientation="Horizontal">
                             <Label Text="Leave Accrual Rate" />
                             <Picker Title="Current Leave Accrual Rate" x:Name="LeaveAccrualPicker"
                                     ItemsSource="{Binding LeaveAccrualRates}"
