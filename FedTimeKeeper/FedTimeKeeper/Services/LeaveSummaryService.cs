@@ -4,24 +4,21 @@ using FedTimeKeeper.Utilities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace FedTimeKeeper.Services
 {
     public class LeaveSummaryService : ILeaveSummaryService
     {
-        private readonly FedAnnualLeaveCalculator annualLeaveCalculator;
-        private readonly FedSickLeaveCalculator sickLeaveCalculator;
+        private readonly FederalLeaveCalculator leaveCalculator;
         private readonly FederalCalendarService calendarService;
         private readonly IScheduledLeaveService leaveService;
         private readonly ISettingsService settingsService;
 
         public LeaveSummaryService(ISettingsService settingsService, IScheduledLeaveService leaveService,
-            FedAnnualLeaveCalculator annualLeaveCalculator, FedSickLeaveCalculator sickLeaveCalculator, FederalCalendarService calendarService)
+            FederalLeaveCalculator leaveCalculator, FederalCalendarService calendarService)
         {
             this.leaveService = leaveService;
-            this.annualLeaveCalculator = annualLeaveCalculator;
-            this.sickLeaveCalculator = sickLeaveCalculator;
+            this.leaveCalculator = leaveCalculator;
             this.calendarService = calendarService;
             this.settingsService = settingsService;
         }
@@ -37,7 +34,7 @@ namespace FedTimeKeeper.Services
             IEnumerable<ScheduledLeave> scheduledLeave = leaveService.GetPastScheduled(asOfDate);
 
             annualLeaveSummary.BeginningBalance = settingsService.AnnualLeaveStart;
-            annualLeaveSummary.Earned = annualLeaveCalculator.PayPeriodEndingLeaveBalance(currentPayPeriod);
+            annualLeaveSummary.Earned = leaveCalculator.EndingLeaveBalance(currentPayPeriod);
             annualLeaveSummary.Used = scheduledLeave.Where(sl => sl.Type == LeaveType.Annual).Sum(sl => sl.HoursTaken);
 
             return annualLeaveSummary;
@@ -54,7 +51,7 @@ namespace FedTimeKeeper.Services
             IEnumerable<ScheduledLeave> scheduledLeave = leaveService.GetPastScheduled(asOfDate);
 
             sickLeaveSummary.BeginningBalance = settingsService.SickLeaveStart;
-            sickLeaveSummary.Earned = sickLeaveCalculator.PayPeriodEndingLeaveBalance(currentPayPeriod);
+            sickLeaveSummary.Earned = leaveCalculator.EndingSickLeaveBalance(currentPayPeriod);
             sickLeaveSummary.Used = scheduledLeave.Where(sl => sl.Type == LeaveType.Sick).Sum(sl => sl.HoursTaken);
 
             return sickLeaveSummary;
@@ -93,7 +90,7 @@ namespace FedTimeKeeper.Services
             IEnumerable<ScheduledLeave> scheduledLeave = leaveService.GetPastScheduled(asOfDate);
             double leaveUsed = scheduledLeave.Where(sl => sl.Type == LeaveType.Annual).Sum(sl => sl.HoursTaken);
 
-            double endOfYearBalance = annualLeaveCalculator.PayPeriodEndingLeaveBalance(finalPayPeriod);
+            double endOfYearBalance = leaveCalculator.EndingLeaveBalance(finalPayPeriod);
 
             double adjustedEndOfYearBalance = startBalance + endOfYearBalance - leaveUsed;
 
