@@ -11,7 +11,6 @@ namespace FedTimeKeeper.ViewModels
     public class LeaveInformationViewModel : BaseViewModel
     {
         private readonly INavigationService navigation;
-        private readonly ISettingsService settingsService;
         private readonly FederalCalendarService calendarService;
         private readonly ILeaveSummaryService leaveSummaryService;
 
@@ -101,12 +100,11 @@ namespace FedTimeKeeper.ViewModels
             }
         }
 
-        public LeaveInformationViewModel(FederalCalendarService calendarService, ILeaveSummaryService leaveSummaryService, INavigationService navigation, ISettingsService settingsService)
+        public LeaveInformationViewModel(FederalCalendarService calendarService, ILeaveSummaryService leaveSummaryService, INavigationService navigation)
         {
             this.calendarService = calendarService;
             this.leaveSummaryService = leaveSummaryService;
             this.navigation = navigation;
-            this.settingsService = settingsService;
             Annual = new LeaveSummary();
             UseOrLose = new LeaveSummary();
             Sick = new LeaveSummary();
