@@ -14,21 +14,21 @@ namespace FedTimeKeeper.Utilities
     {
         private readonly int payPeriodLength = 14;
         private readonly DayOfWeek startDayOfWeek = DayOfWeek.Sunday;
-        
+
         /// <summary>
         /// The sequence number for the Pay Period in the Pay Calendar Year
         /// </summary>
         public int Period { get; private set; }
-        
+
         /// <summary>
         /// The start date of the Pay Period
         /// </summary>
         public DateTime StartDate { get; private set; }
-        
+
         /// <summary>
         /// The end date of the Pay Period
         /// </summary>
-        public DateTime EndDate => StartDate.AddDays(payPeriodLength-1);
+        public DateTime EndDate => StartDate.AddDays(payPeriodLength - 1);
 
         /// <summary>
         /// Creates an instance of a Pay Period with the given start date, designated as the given period of the Pay Calendar Year.
@@ -41,7 +41,7 @@ namespace FedTimeKeeper.Utilities
             {
                 throw new ArgumentOutOfRangeException(nameof(startDate), startDate.DayOfWeek, $"Start date must be a {DayOfWeek.Sunday}.");
             }
-            
+
             StartDate = startDate;
 
             if (payPeriod is < 1 or > 27)

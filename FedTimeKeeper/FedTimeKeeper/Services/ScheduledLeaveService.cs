@@ -51,6 +51,7 @@ namespace FedTimeKeeper.Services
 
             return pastLeaves;
         }
+
         /// <summary>
         /// Deletes the ScheduledLeave entry from the database if it exists.
         /// </summary>
