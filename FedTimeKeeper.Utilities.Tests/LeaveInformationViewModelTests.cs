@@ -37,9 +37,11 @@ namespace FedTimeKeeper.Utilities.Tests
         {
             DateTime expected = calendarStart;
             FederalPayPeriod payPeriod = new FederalPayPeriod(expected, 1);
-            calendar.Setup(x => x.TryGetPayPeriodForDate(It.IsAny<DateTime>(), out payPeriod)).Returns(true);
+            calendar.Setup(x => x.StartDate).Returns(expected);
             ICalendar outCalendar = calendar.Object;
             calendarServiceMock.Setup(x => x.TryGetPayCalendarForDate(It.IsAny<DateTime>(), out outCalendar)).Returns(true);
+            calendarServiceMock.Setup(x => x.TryGetPreviousPayPeriod(It.IsAny<DateTime>(), out payPeriod))
+                .Returns(true);
             LeaveInformationViewModel sut = new LeaveInformationViewModel(calendarServiceMock.Object, fixture.Create<ILeaveSummaryService>(),
                 fixture.Create<INavigationService>());
 
