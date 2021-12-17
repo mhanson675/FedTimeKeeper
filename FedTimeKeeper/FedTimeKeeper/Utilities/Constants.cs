@@ -5,9 +5,6 @@ using System.Text;
 
 namespace FedTimeKeeper.Utilities
 {
-    /// <summary>
-    /// Constants used throughout the app
-    /// </summary>
     public static class Constants
     {
         public const string DatabaseFileName = "FedLeave.db3";
@@ -16,13 +13,11 @@ namespace FedTimeKeeper.Utilities
         {
             get
             {
-                var basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+                string basePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
                 return Path.Combine(basePath, DatabaseFileName);
             }
         }
 
-        public static readonly DateTime DefaultFirstPayPeriodStart = new DateTime(2009, 12, 20);
-        public static readonly DateTime DefaultLastPayPeriodStart = new DateTime(2010, 12, 19);
         public static readonly int DefaultLeaveAccrual = 4;
 
         public const int MaxLeaveBalance = 240;
