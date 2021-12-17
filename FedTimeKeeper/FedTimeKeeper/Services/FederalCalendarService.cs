@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using FedTimeKeeper.Services.Interfaces;
 using FedTimeKeeper.Utilities;
 
 namespace FedTimeKeeper.Services
@@ -9,6 +10,9 @@ namespace FedTimeKeeper.Services
     {
         private readonly List<ICalendar> payCalendars;
 
+        /// <summary>
+        /// A readonly list of all the ICalendars contained within the service.
+        /// </summary>
         public IReadOnlyList<ICalendar> PayCalendars => payCalendars.AsReadOnly();
 
         public FederalCalendarService()
@@ -24,12 +28,24 @@ namespace FedTimeKeeper.Services
             };
         }
 
+        /// <summary>
+        /// Gets the ICalendar instance that contains the given date.
+        /// </summary>
+        /// <param name="date">The date to get the ICalendar for.</param>
+        /// <param name="payCalendar">Contains the ICalendar that contains the given date, if the date is found; otherwise null</param>
+        /// <returns>True if the date falls within the Calendar; otherwise false.</returns>
         public bool TryGetPayCalendarForDate(DateTime date, out ICalendar payCalendar)
         {
             payCalendar = payCalendars.FirstOrDefault(c => c.IncludesDate(date));
             return payCalendar != null;
         }
 
+        /// <summary>
+        /// Gets the FederalPayPeriod instance that contains the given date.
+        /// </summary>
+        /// <param name="date">The date to get the FederalPayPeriod for.</param>
+        /// <param name="payPeriod">Contains the <see cref="FederalPayPeriod"/> that contains the given date, if one is found; otherwise null</param>
+        /// <returns>True if the date falls within any of the <see cref="ICalendar"/>s; otherwise false.</returns>
         public bool TryGetPayPeriodForDate(DateTime date, out FederalPayPeriod payPeriod)
         {
             if (!TryGetPayCalendarForDate(date, out ICalendar calendar))
@@ -41,6 +57,12 @@ namespace FedTimeKeeper.Services
             return calendar.TryGetPayPeriodForDate(date, out payPeriod);
         }
 
+        /// <summary>
+        /// Gets the previous FederalPayPeriod instance associated with the given date.
+        /// </summary>
+        /// <param name="date">The date to get the previous FederalPayPeriod for.</param>
+        /// <param name="payPeriod">Contains the previous <see cref="FederalPayPeriod"/> associated with given date, if one is found; otherwise null</param>
+        /// <returns>True if the date falls within any of the <see cref="ICalendar"/>s; otherwise false.</returns>
         public bool TryGetPreviousPayPeriod(DateTime date, out FederalPayPeriod payPeriod)
         {
             if (!TryGetPayCalendarForDate(date, out ICalendar calendar))

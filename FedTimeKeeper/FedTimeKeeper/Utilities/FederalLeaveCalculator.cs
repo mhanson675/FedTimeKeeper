@@ -33,9 +33,15 @@ namespace FedTimeKeeper.Utilities
         /// </summary>
         /// <param name="period">The pay period to use for calculating the leave balance</param>
         /// <returns>The Leave Balance</returns>
-        public int EndingLeaveBalance(FederalPayPeriod period)
+        public int EndingLeaveBalance(int period)
         {
-            return period.Period * LeaveAccrualRate;
+            if (period is < 1 or > 27)
+            {
+                throw new ArgumentOutOfRangeException(nameof(period), period,
+                    "Period must be greater than or equal to one, and less than 27");
+            }
+
+            return period * LeaveAccrualRate;
         }
 
         /// <summary>
@@ -43,9 +49,15 @@ namespace FedTimeKeeper.Utilities
         /// </summary>
         /// <param name="period">The pay period to use for calculating the sick leave balance</param>
         /// <returns>The Sick Leave Balance</returns>
-        public int EndingSickLeaveBalance(FederalPayPeriod period)
+        public int EndingSickLeaveBalance(int period)
         {
-            return period.Period * SickLeaveAccrualRate;
+            if (period is < 1 or > 27)
+            {
+                throw new ArgumentOutOfRangeException(nameof(period), period,
+                    "Period must be greater than or equal to one, and less than 27");
+            }
+
+            return period * SickLeaveAccrualRate;
         }
 
 
@@ -54,8 +66,14 @@ namespace FedTimeKeeper.Utilities
         /// </summary>
         /// <param name="period">The pay period to user for calculating the leave balances.</param>
         /// <returns>A (int, int) tuple, with the Annual Leave as the first int, and the Sick Leave as the last int.</returns>
-        public (int Annual, int Sick) EndingBalances(FederalPayPeriod period)
+        public (int Annual, int Sick) EndingBalances(int period)
         {
+            if (period is < 1 or > 27)
+            {
+                throw new ArgumentOutOfRangeException(nameof(period), period,
+                    "Period must be greater than or equal to one, and less than 27");
+            }
+
             return (EndingLeaveBalance(period), EndingSickLeaveBalance(period));
         }
     }
