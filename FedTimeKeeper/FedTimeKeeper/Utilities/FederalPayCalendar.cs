@@ -40,42 +40,6 @@ namespace FedTimeKeeper.Utilities
         /// </summary>
         public int NumberOfPayPeriods => PayPeriods.Count();
 
-        /// <summary>
-        /// Constructs a new Pay Calendar starting and ending on the dates provided.
-        /// </summary>
-        /// <param name="startDate">The first day of the Pay Calendar</param>
-        /// <param name="endDate">The last day of the Pay Calendar</param>
-        [Obsolete("Use FederalPayCalendar(DateTime startDate) instead.")]
-        public FederalPayCalendar(DateTime startDate, DateTime endDate) : this(startDate)
-        {
-            //TODO: Remove - old instantiation
-            //if (startDate >= endDate)
-            //{
-            //    throw new ArgumentOutOfRangeException(nameof(startDate), startDate, "The start date must be before the end date.");
-            //}
-
-            //if (startDate.DayOfWeek != DayOfWeek.Sunday)
-            //{
-            //    throw new ArgumentOutOfRangeException(nameof(startDate), startDate.DayOfWeek, "The start date must be a Sunday.");
-            //}
-
-            //if (endDate.DayOfWeek != DayOfWeek.Saturday)
-            //{
-            //    throw new ArgumentOutOfRangeException(nameof(endDate), endDate.DayOfWeek, "The end date must be a Saturday.");
-            //}
-
-            //StartDate = startDate;
-            //payPeriods = new List<FederalPayPeriod>();
-
-            //if (startDate.DayOfYear == 1)
-            //{
-            //    BuildCalendar(startDate, 27);
-            //}
-            //else
-            //{
-            //    BuildCalendar(startDate, 26);
-            //}
-        }
 
         /// <summary>
         /// Constructs a new Pay Calendar using the given StartDate.
@@ -194,26 +158,6 @@ namespace FedTimeKeeper.Utilities
             }
 
             EndDate = periodStart.AddDays(-1);
-        }
-
-        //TODO: Remove
-        [Obsolete("No longer needed, should use BuildCalendar(DateTime startDate) instead. Will be removed in the future.")]
-        private static List<FederalPayPeriod> PopulatePayPeriods(DateTime startDate, DateTime endDate)
-        {
-            List<FederalPayPeriod> periods = new List<FederalPayPeriod>();
-            DateTime periodStart = startDate;
-            int payPeriod = 1;
-            while (periodStart < endDate)
-            {
-                FederalPayPeriod periodToAdd = new FederalPayPeriod(periodStart, payPeriod);
-
-                periods.Add(periodToAdd);
-
-                periodStart = periodStart.AddDays(14);
-                payPeriod++;
-            }
-
-            return periods;
         }
     }
 }
