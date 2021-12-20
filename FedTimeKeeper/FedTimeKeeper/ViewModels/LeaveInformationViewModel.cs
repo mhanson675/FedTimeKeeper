@@ -35,7 +35,6 @@ namespace FedTimeKeeper.ViewModels
             {
                 asOfDate = value;
                 OnPropertyChanged(nameof(AsOfDate));
-                UpdateReportEndingDate(value);
                 LoadData();
             }
         }
