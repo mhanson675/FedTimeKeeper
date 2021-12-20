@@ -78,15 +78,13 @@ namespace FedTimeKeeper.Services
 
             DateTime previousPeriodEndDate = calendar.StartDate.AddDays(-1);
 
-            if (TryGetPayCalendarForDate(previousPeriodEndDate, out calendar))
-            {
-                return calendar.TryGetPayPeriodForDate(previousPeriodEndDate, out payPeriod);
-            }
-            else
+            if (!TryGetPayCalendarForDate(previousPeriodEndDate, out calendar))
             {
                 payPeriod = null;
                 return false;
             }
+
+            return calendar.TryGetPayPeriodForDate(previousPeriodEndDate, out payPeriod);
         }
     }
 }

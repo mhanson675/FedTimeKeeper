@@ -11,6 +11,13 @@ namespace FedTimeKeeper.Services.Interfaces
     public interface IScheduledLeaveService
     {
         /// <summary>
+        /// Get the number of leave hours taken for the given type, as of the given date.
+        /// </summary>
+        /// <param name="type">The type of leave taken.</param>
+        /// <param name="asOfDate">The as of date to return the hours for.</param>
+        /// <returns></returns>
+        double GetHoursTaken(LeaveType type, DateTime asOfDate);
+        /// <summary>
         /// Gets all the ScheduledLeave entries
         /// </summary>
         /// <returns>A list of ScheduledLeave entries</returns>

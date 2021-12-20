@@ -22,15 +22,12 @@ namespace FedTimeKeeper.Services
             this.database = database;
         }
 
-        /// <summary>
-        /// Updates the ScheduledLeave instance if it exists; otherwise creates an entry and saves it.
-        /// </summary>
-        /// <param name="leave">The ScheduledLeave entry to save</param>
-        public void SaveLeave(ScheduledLeave leave)
+        public double GetHoursTaken(LeaveType type, DateTime asOfDate)
         {
-            _ = leave?.Id == 0 ? database.AddLeave(leave) : database.UpdateLeave(leave);
-        }
+            IEnumerable<ScheduledLeave> leaves = GetPastScheduled(asOfDate);
 
+            return leaves.Where(l => l.Type == type).Sum(l => l.HoursTaken);
+        }
         /// <summary>
         /// Gets all the ScheduledLeave entries from the database
         /// </summary>
@@ -50,6 +47,15 @@ namespace FedTimeKeeper.Services
             IOrderedEnumerable<ScheduledLeave> pastLeaves = database.GetAllLeaves().Where(l => l.EndDate < date).OrderBy(l => l.StartDate);
 
             return pastLeaves;
+        }
+
+        /// <summary>
+        /// Updates the ScheduledLeave instance if it exists; otherwise creates an entry and saves it.
+        /// </summary>
+        /// <param name="leave">The ScheduledLeave entry to save</param>
+        public void SaveLeave(ScheduledLeave leave)
+        {
+            _ = leave?.Id == 0 ? database.AddLeave(leave) : database.UpdateLeave(leave);
         }
 
         /// <summary>
