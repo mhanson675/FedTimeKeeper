@@ -7,9 +7,9 @@ namespace FedTimeKeeper.Services.Interfaces
 {
     public interface ILeaveSummaryService
     {
-        LeaveSummary GetAnnualLeaveSummary(DateTime asOfDate);
-        LeaveSummary GetSickLeaveSummary(DateTime asOfDate);
-        LeaveSummary GetTimeOffAwardSummary(DateTime asOfDate);
-        UseOrLoseSummary GetUseOrLoseSummary(DateTime asOfDate);
+        LeaveSummary GetAnnualLeaveSummary(DateTime startDate, DateTime endDate);
+        LeaveSummary GetSickLeaveSummary(DateTime startDate, DateTime endDate);
+        LeaveSummary GetTimeOffAwardSummary(DateTime startDate, DateTime endDate);
+        UseOrLoseSummary GetUseOrLoseSummary(DateTime startDate, DateTime endDate);
     }
 }

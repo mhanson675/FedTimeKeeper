@@ -106,6 +106,7 @@ namespace FedTimeKeeper.ViewModels
             this.leaveSummaryService = leaveSummaryService;
             this.navigation = navigation;
             this.settings = settings;
+            FirstCalendarDate = settings.SettingsDate;
             Annual = new LeaveSummary();
             UseOrLose = new LeaveSummary();
             Sick = new LeaveSummary();
@@ -115,11 +116,29 @@ namespace FedTimeKeeper.ViewModels
 
         private void LoadData()
         {
-            FirstCalendarDate = settings.SettingsDate;
-            
-            if (!calendarService.TryGetPayCalendarForDate(AsOfDate, out ICalendar currentCalendar))
+
+            try
             {
-                navigation.DisplayAlertMessage("Calendar Doesn't Exist", "There is no Pay Calendar for this date.");
+                if (!calendarService.TryGetPayCalendarForDate(AsOfDate, out ICalendar currentCalendar))
+                {
+                    throw new ArgumentOutOfRangeException(nameof(AsOfDate), AsOfDate, "There is no Pay Calendar for this date.");
+                }
+
+                if (!calendarService.TryGetPreviousPayPeriod(AsOfDate, out FederalPayPeriod previousPayPeriod))
+                {
+                    throw new ArgumentOutOfRangeException(nameof(AsOfDate), AsOfDate, "There is no Pay Period Available");
+                }
+                
+                ReportPayPeriodEndDate = previousPayPeriod.EndDate;
+
+                Annual = leaveSummaryService.GetAnnualLeaveSummary(currentCalendar.StartDate, ReportPayPeriodEndDate);
+                UseOrLose = leaveSummaryService.GetUseOrLoseSummary(currentCalendar.StartDate, ReportPayPeriodEndDate);
+                Sick = leaveSummaryService.GetSickLeaveSummary(currentCalendar.StartDate, ReportPayPeriodEndDate);
+                TimeOff = leaveSummaryService.GetTimeOffAwardSummary(currentCalendar.StartDate, ReportPayPeriodEndDate);
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                navigation.DisplayAlertMessage("Calendar Doesn't Exist", ex.Message);
 
                 ReportPayPeriodEndDate = AsOfDate;
 
@@ -127,28 +146,8 @@ namespace FedTimeKeeper.ViewModels
                 UseOrLose = new LeaveSummary();
                 Sick = new LeaveSummary();
                 TimeOff = new LeaveSummary();
-                return;
             }
 
-            if (!calendarService.TryGetPreviousPayPeriod(AsOfDate, out FederalPayPeriod previousPayPeriod))
-            {
-                navigation.DisplayAlertMessage("Pay Period Doesn't Exist", "There is no Pay Period available for this date.");
-
-                ReportPayPeriodEndDate = AsOfDate;
-
-                Annual = new LeaveSummary();
-                UseOrLose = new LeaveSummary();
-                Sick = new LeaveSummary();
-                TimeOff = new LeaveSummary();
-                return;
-            }
-
-            ReportPayPeriodEndDate = previousPayPeriod.EndDate;
-
-            Annual = leaveSummaryService.GetAnnualLeaveSummary(ReportPayPeriodEndDate);
-            UseOrLose = leaveSummaryService.GetUseOrLoseSummary(ReportPayPeriodEndDate);
-            Sick = leaveSummaryService.GetSickLeaveSummary(ReportPayPeriodEndDate);
-            TimeOff = leaveSummaryService.GetTimeOffAwardSummary(ReportPayPeriodEndDate);
         }
     }
 }

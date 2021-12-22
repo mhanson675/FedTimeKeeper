@@ -22,9 +22,9 @@ namespace FedTimeKeeper.Services
             this.database = database;
         }
 
-        public double GetHoursTaken(LeaveType type, DateTime asOfDate)
+        public double GetHoursTaken(LeaveType type, DateTime startDate, DateTime endDate)
         {
-            IEnumerable<ScheduledLeave> leaves = GetPastScheduled(asOfDate);
+            IEnumerable<ScheduledLeave> leaves = GetPastScheduled(endDate);
 
             return leaves.Where(l => l.Type == type).Sum(l => l.HoursTaken);
         }

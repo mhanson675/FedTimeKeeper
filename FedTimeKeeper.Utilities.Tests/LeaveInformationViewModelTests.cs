@@ -97,7 +97,7 @@ namespace FedTimeKeeper.Utilities.Tests
             calendarServiceMock.Setup(x => x.TryGetPayCalendarForDate(It.IsAny<DateTime>(), out outCalendar)).Returns(true);
             calendarServiceMock.Setup(x => x.TryGetPreviousPayPeriod(It.IsAny<DateTime>(), out payPeriod))
                 .Returns(true);
-            summaryServiceMock.Setup(x => x.GetAnnualLeaveSummary(It.IsAny<DateTime>())).Returns(expected);
+            summaryServiceMock.Setup(x => x.GetAnnualLeaveSummary(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(expected);
             LeaveInformationViewModel sut = new LeaveInformationViewModel(calendarServiceMock.Object, summaryServiceMock.Object,
                 fixture.Create<INavigationService>(), settingsMock.Object);
 
@@ -116,7 +116,7 @@ namespace FedTimeKeeper.Utilities.Tests
             calendarServiceMock.Setup(x => x.TryGetPayCalendarForDate(It.IsAny<DateTime>(), out outCalendar)).Returns(true);
             calendarServiceMock.Setup(x => x.TryGetPreviousPayPeriod(It.IsAny<DateTime>(), out payPeriod))
                 .Returns(true);
-            summaryServiceMock.Setup(x => x.GetSickLeaveSummary(It.IsAny<DateTime>())).Returns(expected);
+            summaryServiceMock.Setup(x => x.GetSickLeaveSummary(It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(expected);
             LeaveInformationViewModel sut = new LeaveInformationViewModel(calendarServiceMock.Object, summaryServiceMock.Object,
                 fixture.Create<INavigationService>(), settingsMock.Object);
 

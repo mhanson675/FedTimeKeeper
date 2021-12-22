@@ -33,7 +33,7 @@ namespace FedTimeKeeper.Utilities.Tests
             const int annualTaken = 32;
             settingsMock.Setup(x => x.AnnualLeaveStart).Returns(0);
             calculatorMock.Setup(x => x.EndingLeaveBalance(It.IsAny<int>())).Returns(annualAccrued);
-            scheduledMock.Setup(x => x.GetHoursTaken(It.Is<LeaveType>(t => t == LeaveType.Annual), It.IsAny<DateTime>())).Returns(annualTaken);
+            scheduledMock.Setup(x => x.GetHoursTaken(It.Is<LeaveType>(t => t == LeaveType.Annual), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(annualTaken);
             ILeaveSummaryService sut = new LeaveSummaryService(settingsMock.Object, scheduledMock.Object, calculatorMock.Object, calendarMock.Object);
 
             LeaveSummary summary = sut.GetAnnualLeaveSummary(DateTime.Now);
@@ -54,7 +54,7 @@ namespace FedTimeKeeper.Utilities.Tests
             const int sickBalance = sickAccrued - sickTaken;
             settingsMock.Setup(x => x.SickLeaveStart).Returns(0);
             calculatorMock.Setup(x => x.EndingSickLeaveBalance(It.IsAny<int>())).Returns(sickAccrued);
-            scheduledMock.Setup(x => x.GetHoursTaken(It.Is<LeaveType>(t => t == LeaveType.Sick), It.IsAny<DateTime>())).Returns(sickTaken);
+            scheduledMock.Setup(x => x.GetHoursTaken(It.Is<LeaveType>(t => t == LeaveType.Sick), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(sickTaken);
 
             ILeaveSummaryService sut = new LeaveSummaryService(settingsMock.Object, scheduledMock.Object, calculatorMock.Object, calendarMock.Object);
 
@@ -75,7 +75,7 @@ namespace FedTimeKeeper.Utilities.Tests
             const int toffTaken = 16;
             const int toffBalance = toffStart - toffTaken;
             settingsMock.Setup(x => x.TimeOffStart).Returns(toffStart);
-            scheduledMock.Setup(x => x.GetHoursTaken(It.Is<LeaveType>(t => t == LeaveType.Timeoff), It.IsAny<DateTime>())).Returns(toffTaken);
+            scheduledMock.Setup(x => x.GetHoursTaken(It.Is<LeaveType>(t => t == LeaveType.Timeoff), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(toffTaken);
             ILeaveSummaryService sut = new LeaveSummaryService(settingsMock.Object, scheduledMock.Object, calculatorMock.Object, calendarMock.Object);
 
             LeaveSummary summary = sut.GetTimeOffAwardSummary(DateTime.Now);
@@ -99,7 +99,7 @@ namespace FedTimeKeeper.Utilities.Tests
 
             settingsMock.Setup(x => x.AnnualLeaveStart).Returns(annualStart);
             calculatorMock.Setup(x => x.EndingLeaveBalance(It.IsAny<int>())).Returns(annualAccrued);
-            scheduledMock.Setup(x => x.GetHoursTaken(It.Is<LeaveType>(t => t == LeaveType.Annual), It.IsAny<DateTime>())).Returns(annualTaken);
+            scheduledMock.Setup(x => x.GetHoursTaken(It.Is<LeaveType>(t => t == LeaveType.Annual), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(annualTaken);
             calendarMock.Setup(x => x.TryGetPayCalendarForDate(It.IsAny<DateTime>(), out outCalendar)).Returns(true);
             ILeaveSummaryService sut = new LeaveSummaryService(settingsMock.Object, scheduledMock.Object, calculatorMock.Object, calendarMock.Object);
 
