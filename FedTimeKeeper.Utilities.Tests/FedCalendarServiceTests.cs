@@ -24,7 +24,7 @@ namespace FedTimeKeeper.Utilities.Tests
         {
             Assert.NotNull(sut.PayCalendars);
             Assert.NotEmpty(sut.PayCalendars);
-            Assert.Equal(5, sut.PayCalendars.Count);
+            Assert.Equal(6, sut.PayCalendars.Count);
         }
 
         #endregion Inintialization
@@ -121,7 +121,6 @@ namespace FedTimeKeeper.Utilities.Tests
 
         public static TheoryData<DateTime> TryGetFailDates => new TheoryData<DateTime>
         {
-            { new DateTime(2021,12,31) },
             { new DateTime(2020,12,31) },
             { new DateTime(2031,01,01) },
             { new DateTime(2019,12,23) },

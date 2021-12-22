@@ -20,6 +20,7 @@ namespace FedTimeKeeper.Services
             //TODO: Remove HardCoding
             payCalendars = new List<ICalendar>
             {
+                new FederalPayCalendar(DateTime.Parse("2021-01-03")),
                 new FederalPayCalendar(DateTime.Parse("2022-01-02")),
                 new FederalPayCalendar(DateTime.Parse("2023-01-01")),
                 new FederalPayCalendar(DateTime.Parse("2024-01-14")),

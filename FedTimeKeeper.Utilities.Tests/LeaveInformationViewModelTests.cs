@@ -21,34 +21,38 @@ namespace FedTimeKeeper.Utilities.Tests
         private readonly Mock<ILeaveSummaryService> summaryServiceMock;
         private readonly Mock<IFederalCalendarService> calendarServiceMock;
         private readonly Mock<INavigationService> navigationMock;
-        private readonly DateTime calendarStart;
-        private readonly Mock<ICalendar> calendar;
+        private readonly Mock<ISettingsService> settingsMock;
+        private readonly DateTime calendarStartDate;
+        private ICalendar outCalendar;
+        private FederalPayPeriod outPayPeriod;
 
         public LeaveInformationViewModelTests()
         {
             fixture = new Fixture()
                 .Customize(new AutoMoqCustomization());
+
+            settingsMock = new Mock<ISettingsService>();
+            settingsMock.Setup(x => x.SettingsDate).Returns(Constants.DefaultDate);
+
             summaryServiceMock = new Mock<ILeaveSummaryService>();
             calendarServiceMock = new Mock<IFederalCalendarService>();
             navigationMock = new Mock<INavigationService>();
-            calendarStart = new DateTime(2022, 01, 02);
-            calendar = new Mock<ICalendar>();
+            calendarStartDate = DateTime.Now.GetFirstSundayOfYear();
+            outCalendar = new FederalPayCalendar(calendarStartDate);
+            outPayPeriod = new FederalPayPeriod(calendarStartDate, 1);
         }
         
         [Fact]
         public void ViewModel_Initializes_FirstDayOfPayYear_Success()
         {
-            DateTime expected = calendarStart;
-            FederalPayPeriod payPeriod = new FederalPayPeriod(expected, 1);
-            calendar.Setup(x => x.StartDate).Returns(expected);
-            ICalendar outCalendar = calendar.Object;
+            DateTime expected = calendarStartDate;
             calendarServiceMock.Setup(x => x.TryGetPayCalendarForDate(It.IsAny<DateTime>(), out outCalendar)).Returns(true);
-            calendarServiceMock.Setup(x => x.TryGetPreviousPayPeriod(It.IsAny<DateTime>(), out payPeriod))
+            calendarServiceMock.Setup(x => x.TryGetPreviousPayPeriod(It.IsAny<DateTime>(), out outPayPeriod))
                 .Returns(true);
             LeaveInformationViewModel sut = new LeaveInformationViewModel(calendarServiceMock.Object, fixture.Create<ILeaveSummaryService>(),
-                fixture.Create<INavigationService>());
+                fixture.Create<INavigationService>(), settingsMock.Object);
 
-            DateTime actual = sut.FirstDayOfPayYear;
+            DateTime actual = sut.FirstCalendarDate;
 
             Assert.Equal(expected, actual);
         }
@@ -56,15 +60,12 @@ namespace FedTimeKeeper.Utilities.Tests
         [Fact]
         public void ViewModel_Initializes_AsOfDate_Success()
         {
-            DateTime start = DateTime.Now.GetLastSunday();
-            FederalPayPeriod payPeriod = new FederalPayPeriod(start, 1);
-            calendar.Setup(x => x.StartDate).Returns(start);
-            ICalendar outCalendar = calendar.Object;
+            DateTime start = calendarStartDate;
             calendarServiceMock.Setup(x => x.TryGetPayCalendarForDate(It.IsAny<DateTime>(), out outCalendar)).Returns(true);
-            calendarServiceMock.Setup(x => x.TryGetPreviousPayPeriod(It.IsAny<DateTime>(), out payPeriod))
+            calendarServiceMock.Setup(x => x.TryGetPreviousPayPeriod(It.IsAny<DateTime>(), out outPayPeriod))
                 .Returns(true);
             LeaveInformationViewModel sut = new LeaveInformationViewModel(calendarServiceMock.Object, fixture.Create<ILeaveSummaryService>(),
-                fixture.Create<INavigationService>());
+                fixture.Create<INavigationService>(), settingsMock.Object);
 
             DateTime actual = sut.AsOfDate;
 
@@ -74,19 +75,16 @@ namespace FedTimeKeeper.Utilities.Tests
         [Fact]
         public void ViewModel_Initializes_ReportPeriodEndDate_Success()
         {
-            DateTime start = DateTime.Now.GetLastSunday();
-            FederalPayPeriod payPeriod = new FederalPayPeriod(start, 1);
-            calendar.Setup(x => x.StartDate).Returns(start);
-            ICalendar outCalendar = calendar.Object;
+            DateTime start = calendarStartDate;
             calendarServiceMock.Setup(x => x.TryGetPayCalendarForDate(It.IsAny<DateTime>(), out outCalendar)).Returns(true);
-            calendarServiceMock.Setup(x => x.TryGetPreviousPayPeriod(It.IsAny<DateTime>(), out payPeriod))
+            calendarServiceMock.Setup(x => x.TryGetPreviousPayPeriod(It.IsAny<DateTime>(), out outPayPeriod))
                 .Returns(true);
             LeaveInformationViewModel sut = new LeaveInformationViewModel(calendarServiceMock.Object, fixture.Create<ILeaveSummaryService>(),
-                fixture.Create<INavigationService>());
+                fixture.Create<INavigationService>(), settingsMock.Object);
 
             DateTime actual = sut.ReportPayPeriodEndDate;
 
-            Assert.Equal(payPeriod.EndDate.Date, actual.Date);
+            Assert.Equal(outPayPeriod.EndDate.Date, actual.Date);
         }
 
         [Fact]
@@ -94,20 +92,63 @@ namespace FedTimeKeeper.Utilities.Tests
         {
             LeaveSummary expected = new LeaveSummary
                 {BeginningBalance = 40, Earned = 16, Type = LeaveType.Annual, Used = 0};
-            DateTime start = DateTime.Now.GetLastSunday();
+            DateTime start = calendarStartDate;
             FederalPayPeriod payPeriod = new FederalPayPeriod(start, 1);
-            calendar.Setup(x => x.StartDate).Returns(start);
-            ICalendar outCalendar = calendar.Object;
             calendarServiceMock.Setup(x => x.TryGetPayCalendarForDate(It.IsAny<DateTime>(), out outCalendar)).Returns(true);
             calendarServiceMock.Setup(x => x.TryGetPreviousPayPeriod(It.IsAny<DateTime>(), out payPeriod))
                 .Returns(true);
             summaryServiceMock.Setup(x => x.GetAnnualLeaveSummary(It.IsAny<DateTime>())).Returns(expected);
             LeaveInformationViewModel sut = new LeaveInformationViewModel(calendarServiceMock.Object, summaryServiceMock.Object,
-                fixture.Create<INavigationService>());
+                fixture.Create<INavigationService>(), settingsMock.Object);
 
             LeaveSummary actual = sut.Annual;
 
             Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ViewModel_Initializes_LeaveSummary_Sick_Success()
+        {
+            LeaveSummary expected = new LeaveSummary
+                { BeginningBalance = 40, Earned = 16, Type = LeaveType.Sick, Used = 0 };
+            DateTime start = calendarStartDate;
+            FederalPayPeriod payPeriod = new FederalPayPeriod(start, 1);
+            calendarServiceMock.Setup(x => x.TryGetPayCalendarForDate(It.IsAny<DateTime>(), out outCalendar)).Returns(true);
+            calendarServiceMock.Setup(x => x.TryGetPreviousPayPeriod(It.IsAny<DateTime>(), out payPeriod))
+                .Returns(true);
+            summaryServiceMock.Setup(x => x.GetSickLeaveSummary(It.IsAny<DateTime>())).Returns(expected);
+            LeaveInformationViewModel sut = new LeaveInformationViewModel(calendarServiceMock.Object, summaryServiceMock.Object,
+                fixture.Create<INavigationService>(), settingsMock.Object);
+
+            LeaveSummary actual = sut.Sick;
+
+            Assert.Equal(expected, actual);
+        }
+
+        [Fact]
+        public void ViewModel_Initializes_LeaveSummary_Annual_Fails_No_Calendar()
+        {
+            LeaveSummary expected = new LeaveSummary();
+            DateTime start = calendarStartDate;
+            FederalPayPeriod payPeriod = new FederalPayPeriod(start, 1);
+            outCalendar = null;
+            calendarServiceMock.Setup(x => x.TryGetPayCalendarForDate(It.IsAny<DateTime>(), out outCalendar)).Returns(false);
+            calendarServiceMock.Setup(x => x.TryGetPreviousPayPeriod(It.IsAny<DateTime>(), out payPeriod))
+                .Returns(true);
+            navigationMock.Setup(x =>
+                x.DisplayAlertMessage(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()));
+            
+            LeaveInformationViewModel sut = new LeaveInformationViewModel(calendarServiceMock.Object,
+                fixture.Create<ILeaveSummaryService>(), navigationMock.Object, settingsMock.Object);
+
+            LeaveSummary actual = sut.Annual;
+
+            Assert.Equal(expected.BeginningBalance, actual.BeginningBalance);
+            Assert.Equal(expected.EndingBalance, actual.EndingBalance);
+            Assert.Equal(expected.Earned, actual.Earned);
+            Assert.Equal(expected.Used, actual.Used);
+
+            navigationMock.Verify(x => x.DisplayAlertMessage(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>()), Times.AtLeastOnce);
         }
     }
 }

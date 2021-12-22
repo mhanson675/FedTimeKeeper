@@ -11,18 +11,19 @@ namespace FedTimeKeeper.ViewModels
     public class LeaveInformationViewModel : BaseViewModel
     {
         private readonly INavigationService navigation;
+        private readonly ISettingsService settings;
         private readonly IFederalCalendarService calendarService;
         private readonly ILeaveSummaryService leaveSummaryService;
 
-        private DateTime firstDayOfPayYear;
+        private DateTime firstCalendarDate;
 
-        public DateTime FirstDayOfPayYear
+        public DateTime FirstCalendarDate
         {
-            get => firstDayOfPayYear;
+            get => firstCalendarDate;
             set
             {
-                firstDayOfPayYear = value;
-                OnPropertyChanged(nameof(FirstDayOfPayYear));
+                firstCalendarDate = value;
+                OnPropertyChanged(nameof(FirstCalendarDate));
             }
         }
 
@@ -99,11 +100,12 @@ namespace FedTimeKeeper.ViewModels
             }
         }
 
-        public LeaveInformationViewModel(IFederalCalendarService calendarService, ILeaveSummaryService leaveSummaryService, INavigationService navigation)
+        public LeaveInformationViewModel(IFederalCalendarService calendarService, ILeaveSummaryService leaveSummaryService, INavigationService navigation, ISettingsService settings)
         {
             this.calendarService = calendarService;
             this.leaveSummaryService = leaveSummaryService;
             this.navigation = navigation;
+            this.settings = settings;
             Annual = new LeaveSummary();
             UseOrLose = new LeaveSummary();
             Sick = new LeaveSummary();
@@ -113,16 +115,32 @@ namespace FedTimeKeeper.ViewModels
 
         private void LoadData()
         {
+            FirstCalendarDate = settings.SettingsDate;
+            
             if (!calendarService.TryGetPayCalendarForDate(AsOfDate, out ICalendar currentCalendar))
             {
-                throw new ArgumentOutOfRangeException(nameof(AsOfDate), AsOfDate, "There is no Pay Calendar for this date.");
-            }
+                navigation.DisplayAlertMessage("Calendar Doesn't Exist", "There is no Pay Calendar for this date.");
 
-            FirstDayOfPayYear = currentCalendar.StartDate;
+                ReportPayPeriodEndDate = AsOfDate;
+
+                Annual = new LeaveSummary();
+                UseOrLose = new LeaveSummary();
+                Sick = new LeaveSummary();
+                TimeOff = new LeaveSummary();
+                return;
+            }
 
             if (!calendarService.TryGetPreviousPayPeriod(AsOfDate, out FederalPayPeriod previousPayPeriod))
             {
-                throw new ArgumentOutOfRangeException(nameof(AsOfDate), AsOfDate, "Unable to get the previous pay period for this date.");
+                navigation.DisplayAlertMessage("Pay Period Doesn't Exist", "There is no Pay Period available for this date.");
+
+                ReportPayPeriodEndDate = AsOfDate;
+
+                Annual = new LeaveSummary();
+                UseOrLose = new LeaveSummary();
+                Sick = new LeaveSummary();
+                TimeOff = new LeaveSummary();
+                return;
             }
 
             ReportPayPeriodEndDate = previousPayPeriod.EndDate;
@@ -131,16 +149,6 @@ namespace FedTimeKeeper.ViewModels
             UseOrLose = leaveSummaryService.GetUseOrLoseSummary(ReportPayPeriodEndDate);
             Sick = leaveSummaryService.GetSickLeaveSummary(ReportPayPeriodEndDate);
             TimeOff = leaveSummaryService.GetTimeOffAwardSummary(ReportPayPeriodEndDate);
-        }
-
-        private void UpdateReportEndingDate(DateTime newDate)
-        {
-            if (!calendarService.TryGetPreviousPayPeriod(newDate, out FederalPayPeriod previousPayPeriod))
-            {
-                return;
-            }
-
-            ReportPayPeriodEndDate = previousPayPeriod.EndDate;
         }
     }
 }

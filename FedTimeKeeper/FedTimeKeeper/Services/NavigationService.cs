@@ -32,7 +32,7 @@ namespace FedTimeKeeper.Services
             }
         }
 
-        public void DisplayAlertMessage(string title, string message, string cancel)
+        public void DisplayAlertMessage(string title, string message, string cancel = "Ok")
         {
             MainPage.DisplayAlert(title, message, cancel);
         }

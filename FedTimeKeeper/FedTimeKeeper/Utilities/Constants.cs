@@ -19,11 +19,13 @@ namespace FedTimeKeeper.Utilities
         }
 
         public static readonly int DefaultLeaveAccrual = 4;
+        public static DateTime DefaultDate = new DateTime(2021, 01, 03);
 
         public const int MaxLeaveBalance = 240;
-        public const string annualLeaveKey = "StartAnnualBalance";
-        public const string sickLeaveKey = "StartSickBalance";
-        public const string timeOffKey = "StartTimeOffBalance";
-        public const string leaveRateKey = "LeaveAccrualRate";
+        public static string SettingsDateKey = "SettingsDate";
+        public const string AnnualLeaveKey = "StartAnnualBalance";
+        public const string SickLeaveKey = "StartSickBalance";
+        public const string TimeOffKey = "StartTimeOffBalance";
+        public const string LeaveRateKey = "LeaveAccrualRate";
     }
 }

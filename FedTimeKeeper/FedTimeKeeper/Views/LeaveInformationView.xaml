@@ -14,7 +14,7 @@
             Format="dd-MMM-yyyy"
             BackgroundColor="DarkGray"
             TextColor="Black"
-            MinimumDate="{Binding FirstDayOfPayYear}">
+            MinimumDate="{Binding FirstCalendarDate}">
         </DatePicker>
         <StackLayout Spacing="0">
             <Label BackgroundColor="#4E3E32" TextColor="White">Employee Information</Label>
