@@ -9,11 +9,11 @@ namespace FedTimeKeeper.Database
     {
         void Initialize();
 
+        IEnumerable<ScheduledLeave> GetAllLeaves();
         int CreateUser(User user);
         User GetUser();
         int DeleteUser(User user);
 
-        IEnumerable<ScheduledLeave> GetAllLeaves();
         int AddLeave(ScheduledLeave leave);
         int UpdateLeave(ScheduledLeave leave);
         int DeleteLeave(ScheduledLeave leave);

@@ -13,10 +13,11 @@ namespace FedTimeKeeper.Services.Interfaces
         /// <summary>
         /// Get the number of leave hours taken for the given type, as of the given date.
         /// </summary>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
         /// <param name="type">The type of leave taken.</param>
-        /// <param name="asOfDate">The as of date to return the hours for.</param>
-        /// <returns></returns>
-        double GetHoursTaken(LeaveType type, DateTime startDate, DateTime endDate);
+        /// <returns>The number of hours taken between the start date and end date.</returns>
+        double GetHoursTaken(DateTime startDate, DateTime endDate, LeaveType type);
         /// <summary>
         /// Gets all the ScheduledLeave entries
         /// </summary>

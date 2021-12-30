@@ -16,17 +16,23 @@ namespace FedTimeKeeper.Services
     {
         private readonly ILocalDatabase database;
 
-
         public ScheduledLeaveService(ILocalDatabase database)
         {
             this.database = database;
         }
 
-        public double GetHoursTaken(LeaveType type, DateTime startDate, DateTime endDate)
+        /// <summary>
+        /// Gets the hours taken for the given leave type between the start date and end date.
+        /// </summary>
+        /// <param name="startDate">The start date.</param>
+        /// <param name="endDate">The end date.</param>
+        /// <param name="type">The leave type.</param>
+        /// <returns></returns>
+        public double GetHoursTaken(DateTime startDate, DateTime endDate, LeaveType type)
         {
             IEnumerable<ScheduledLeave> leaves = GetPastScheduled(endDate);
 
-            return leaves.Where(l => l.Type == type).Sum(l => l.HoursTaken);
+            return leaves.Where(l => l.Type == type && l.StartDate > startDate.Date).Sum(l => l.HoursTaken);
         }
         /// <summary>
         /// Gets all the ScheduledLeave entries from the database
@@ -44,7 +50,7 @@ namespace FedTimeKeeper.Services
         /// <returns>A list of ScheduledLeave entries who's EndDates occur prior to the given date</returns>
         public IEnumerable<ScheduledLeave> GetPastScheduled(DateTime date)
         {
-            IOrderedEnumerable<ScheduledLeave> pastLeaves = database.GetAllLeaves().Where(l => l.EndDate < date).OrderBy(l => l.StartDate);
+            IOrderedEnumerable<ScheduledLeave> pastLeaves = database.GetAllLeaves().Where(l => l.EndDate < date.Date).OrderBy(l => l.StartDate);
 
             return pastLeaves;
         }

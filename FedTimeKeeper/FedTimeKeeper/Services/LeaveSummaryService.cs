@@ -10,65 +10,38 @@ namespace FedTimeKeeper.Services
 
     public class LeaveSummaryService : ILeaveSummaryService
     {
-        private readonly IFederalLeaveCalculator leaveCalculator;
         private readonly IFederalCalendarService calendarService;
         private readonly IScheduledLeaveService leaveService;
         private readonly ISettingsService settingsService;
 
-        public LeaveSummaryService(ISettingsService settingsService, IScheduledLeaveService leaveService,
-            IFederalLeaveCalculator leaveCalculator, IFederalCalendarService calendarService)
+        public LeaveSummaryService(ISettingsService settingsService, IScheduledLeaveService leaveService, IFederalCalendarService calendarService)
         {
             this.leaveService = leaveService;
-            this.leaveCalculator = leaveCalculator;
             this.calendarService = calendarService;
             this.settingsService = settingsService;
         }
 
-        public LeaveSummary GetAnnualLeaveSummary(DateTime startDate, DateTime endDate)
+        public LeaveSummary GetSummary(DateTime asOfDate, LeaveType leaveType)
         {
-            LeaveSummary annualLeaveSummary = new LeaveSummary { Type = LeaveType.Annual };
-            if (!calendarService.TryGetPayPeriodForDate(endDate, out FederalPayPeriod currentPayPeriod))
+            if (!calendarService.TryGetPayCalendarForDate(asOfDate, out ICalendar calendar))
             {
-                throw new ArgumentOutOfRangeException(nameof(endDate), endDate, "Date does not exist in any current pay calendars.");
+                throw new ArgumentOutOfRangeException(nameof(asOfDate), asOfDate, "Date does not exist in any current pay calendars.");
             }
 
-            annualLeaveSummary.BeginningBalance = settingsService.AnnualLeaveStart;
-            annualLeaveSummary.Earned = leaveCalculator.EndingLeaveBalance(currentPayPeriod.Period);
-            annualLeaveSummary.Used = leaveService.GetHoursTaken(LeaveType.Annual, startDate, endDate);
-
-            return annualLeaveSummary;
-        }
-
-        public LeaveSummary GetSickLeaveSummary(DateTime startDate, DateTime endDate)
-        {
-            LeaveSummary sickLeaveSummary = new LeaveSummary { Type = LeaveType.Sick };
-
-            if (!calendarService.TryGetPayPeriodForDate(endDate, out FederalPayPeriod currentPayPeriod))
+            if (!calendar.TryGetPayPeriodForDate(asOfDate, out FederalPayPeriod currentPayPeriod))
             {
-                throw new ArgumentOutOfRangeException(nameof(endDate), endDate, "Date does not exist in any current pay calendars.");
+                throw new ArgumentOutOfRangeException(nameof(asOfDate), asOfDate, "Date does not exist in any current pay calendars.");
             }
 
-            sickLeaveSummary.BeginningBalance = settingsService.SickLeaveStart;
-            sickLeaveSummary.Earned = leaveCalculator.EndingSickLeaveBalance(currentPayPeriod.Period);
-            sickLeaveSummary.Used = leaveService.GetHoursTaken(LeaveType.Sick,startDate, endDate);
 
-            return sickLeaveSummary;
+            double beginningBalance = PayYearBeginningBalance(leaveType);
+            double earned = EndOfPayPeriodAccrued(currentPayPeriod.Period, leaveType);
+            double used = leaveService.GetHoursTaken(calendar.StartDate, asOfDate, leaveType);
+
+            return new LeaveSummary {Type = leaveType, BeginningBalance = beginningBalance, Earned = earned, Used = used};
         }
 
-        public LeaveSummary GetTimeOffAwardSummary(DateTime startDate, DateTime endDate)
-        {
-            LeaveSummary timeOffSummary = new LeaveSummary
-            {
-                Type = LeaveType.Timeoff,
-                BeginningBalance = settingsService.TimeOffStart,
-                Earned = 0.0,
-                Used = leaveService.GetHoursTaken(LeaveType.Timeoff, startDate, endDate)
-            };
-
-            return timeOffSummary;
-        }
-
-        public UseOrLoseSummary GetUseOrLoseSummary(DateTime startDate, DateTime endDate)
+        public UseOrLoseSummary GetUseOrLoseSummary(DateTime asOfDate)
         {
             UseOrLoseSummary useOrLoseSummary = new UseOrLoseSummary
             {
@@ -78,19 +51,16 @@ namespace FedTimeKeeper.Services
                 Used = 0.0
             };
 
-            if (!calendarService.TryGetPayCalendarForDate(endDate, out ICalendar currentCalendar))
+            if (!calendarService.TryGetPayCalendarForDate(asOfDate, out ICalendar currentCalendar))
             {
-                throw new ArgumentOutOfRangeException(nameof(endDate), endDate, "Date does not exist in any current pay calendars.");
+                throw new ArgumentOutOfRangeException(nameof(asOfDate), asOfDate, "Date does not exist in any current pay calendars.");
             }
 
             FederalPayPeriod finalPayPeriod = currentCalendar.GetFinalPayPeriod();
 
             double startBalance = settingsService.AnnualLeaveStart;
-
-            double leaveUsed = leaveService.GetHoursTaken(LeaveType.Annual, startDate, endDate);
-
-            double endOfYearBalance = leaveCalculator.EndingLeaveBalance(finalPayPeriod.Period);
-
+            double leaveUsed = leaveService.GetHoursTaken(currentCalendar.StartDate, asOfDate, LeaveType.Annual);
+            double endOfYearBalance = EndOfPayPeriodAccrued(finalPayPeriod.Period, LeaveType.Annual);
             double adjustedEndOfYearBalance = startBalance + endOfYearBalance - leaveUsed;
 
             if (adjustedEndOfYearBalance >= Constants.MaxLeaveBalance)
@@ -99,6 +69,27 @@ namespace FedTimeKeeper.Services
             }
 
             return useOrLoseSummary;
+        }
+
+        private double PayYearBeginningBalance(LeaveType leaveType)
+        {
+            return leaveType switch
+            {
+                LeaveType.Annual => settingsService.AnnualLeaveStart,
+                LeaveType.Sick => settingsService.SickLeaveStart,
+                LeaveType.Timeoff => settingsService.TimeOffStart,
+                _ => throw new ArgumentOutOfRangeException(nameof(leaveType), leaveType, null)
+            };
+        }
+        private double EndOfPayPeriodAccrued(int period, LeaveType leaveType)
+        {
+            return leaveType switch
+            {
+                LeaveType.Annual => period * settingsService.AccrualRate,
+                LeaveType.Sick => period * 4,
+                LeaveType.Timeoff => 0,
+                _ => throw new ArgumentOutOfRangeException(nameof(leaveType), leaveType, null)
+            };
         }
     }
 }

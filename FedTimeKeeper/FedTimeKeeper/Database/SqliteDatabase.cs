@@ -3,6 +3,7 @@ using FedTimeKeeper.Utilities;
 using SQLite;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace FedTimeKeeper.Database
 {
@@ -19,9 +20,10 @@ namespace FedTimeKeeper.Database
 
             _ = database.CreateTable<ScheduledLeave>();
             _ = database.CreateTable<User>();
+            _ = database.CreateTable<PayYear>();
         }
 
-
+        #region Leave CRUD
         public IEnumerable<ScheduledLeave> GetAllLeaves()
         {
             return database.Table<ScheduledLeave>().ToList();
@@ -46,8 +48,31 @@ namespace FedTimeKeeper.Database
         {
             return database.Delete(leave);
         }
+        #endregion
 
+        #region PayYearCrud
+        public IEnumerable<PayYear> GetAllPayYears()
+        {
+            return database.Table<PayYear>().ToList();
+        }
 
+        public int AddPayYear(PayYear payYear)
+        {
+            return database.Insert(payYear);
+        }
+
+        public int UpdatePayYear(PayYear payYear)
+        {
+            return database.Update(payYear);
+        }
+
+        public int DeletePayYear(PayYear payYear)
+        {
+            return database.Delete(payYear);
+        }
+        #endregion
+
+        #region User CRUD
         public int CreateUser(User user)
         {
             return database.Insert(user);
@@ -62,5 +87,6 @@ namespace FedTimeKeeper.Database
         {
             return database.Delete(user);
         }
+        #endregion
     }
 }

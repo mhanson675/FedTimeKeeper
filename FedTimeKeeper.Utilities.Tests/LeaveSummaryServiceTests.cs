@@ -9,99 +9,104 @@ namespace FedTimeKeeper.Utilities.Tests
 {
     public class LeaveSummaryServiceTests
     {
-        private readonly Mock<IFederalLeaveCalculator> calculatorMock;
-        private readonly Mock<IFederalCalendarService> calendarMock;
+        private readonly Mock<IFederalCalendarService> calendarServiceMock;
         private readonly Mock<IScheduledLeaveService> scheduledMock;
         private readonly Mock<ISettingsService> settingsMock;
+        private readonly int accrualRate = 8;
+        private readonly int sickRate = 4;
+        private readonly int period = 5;
+        private readonly int finalPayPeriod = 26;
+
         public LeaveSummaryServiceTests()
         {
-            settingsMock = new Mock<ISettingsService>();
-
-            calculatorMock = new Mock<IFederalLeaveCalculator>();
-
             scheduledMock = new Mock<IScheduledLeaveService>();
+            
+            settingsMock = new Mock<ISettingsService>();
+            settingsMock.Setup(x => x.AccrualRate).Returns(accrualRate);
 
-            FederalPayPeriod payPeriod = new FederalPayPeriod(new DateTime(2022, 01, 02), 1);
-            calendarMock = new Mock<IFederalCalendarService>();
+            FederalPayPeriod payPeriod = new FederalPayPeriod(new DateTime(2022, 01, 02), period);
+            FederalPayPeriod finalFederalPayPeriod = new FederalPayPeriod(new DateTime(2022, 01, 02), finalPayPeriod);
+            Mock<ICalendar> calendarMock = new Mock<ICalendar>();
             calendarMock.Setup(x => x.TryGetPayPeriodForDate(It.IsAny<DateTime>(), out payPeriod)).Returns(true);
+            calendarMock.Setup(x => x.GetFinalPayPeriod()).Returns(finalFederalPayPeriod);
+
+            ICalendar outCalendar = calendarMock.Object;
+            calendarServiceMock = new Mock<IFederalCalendarService>();
+            calendarServiceMock.Setup(x => x.TryGetPayCalendarForDate(It.IsAny<DateTime>(), out outCalendar)).Returns(true);
         }
 
         [Fact]
         public void LeaveSummaryService_Annual_Success()
         {
-            const int annualAccrued = 40;
-            const int annualTaken = 32;
+            int expectedEarned = period * accrualRate;
+            int expectedTaken = 32;
+            int expectedBalance = expectedEarned - expectedTaken;
             settingsMock.Setup(x => x.AnnualLeaveStart).Returns(0);
-            calculatorMock.Setup(x => x.EndingLeaveBalance(It.IsAny<int>())).Returns(annualAccrued);
-            scheduledMock.Setup(x => x.GetHoursTaken(It.Is<LeaveType>(t => t == LeaveType.Annual), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(annualTaken);
-            ILeaveSummaryService sut = new LeaveSummaryService(settingsMock.Object, scheduledMock.Object, calculatorMock.Object, calendarMock.Object);
+            scheduledMock.Setup(x => x.GetHoursTaken(It.IsAny<DateTime>(), It.IsAny<DateTime>(), LeaveType.Annual)).Returns(expectedTaken);
+            ILeaveSummaryService sut = new LeaveSummaryService(settingsMock.Object, scheduledMock.Object, calendarServiceMock.Object);
 
-            LeaveSummary summary = sut.GetAnnualLeaveSummary(DateTime.Now);
+            LeaveSummary summary = sut.GetSummary(DateTime.Now, LeaveType.Annual);
 
             Assert.NotNull(summary);
             Assert.Equal(0, summary.BeginningBalance);
-            Assert.Equal(annualAccrued, summary.Earned);
+            Assert.Equal(expectedEarned, summary.Earned);
             Assert.Equal(LeaveType.Annual, summary.Type);
-            Assert.Equal(annualTaken, summary.Used);
-            Assert.Equal(8, summary.EndingBalance);
+            Assert.Equal(expectedTaken, summary.Used);
+            Assert.Equal(expectedBalance, summary.EndingBalance);
         }
 
         [Fact]
         public void LeaveSummaryService_Sick_Success()
         {
-            const int sickAccrued = 100;
-            const int sickTaken = 10;
-            const int sickBalance = sickAccrued - sickTaken;
+            int expectedEarned = sickRate * period;
+            int expectedTaken = 4;
+            int expectedBalance = expectedEarned - expectedTaken;
             settingsMock.Setup(x => x.SickLeaveStart).Returns(0);
-            calculatorMock.Setup(x => x.EndingSickLeaveBalance(It.IsAny<int>())).Returns(sickAccrued);
-            scheduledMock.Setup(x => x.GetHoursTaken(It.Is<LeaveType>(t => t == LeaveType.Sick), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(sickTaken);
+            scheduledMock.Setup(x => x.GetHoursTaken(It.IsAny<DateTime>(), It.IsAny<DateTime>(), LeaveType.Sick)).Returns(expectedTaken);
 
-            ILeaveSummaryService sut = new LeaveSummaryService(settingsMock.Object, scheduledMock.Object, calculatorMock.Object, calendarMock.Object);
+            ILeaveSummaryService sut = new LeaveSummaryService(settingsMock.Object, scheduledMock.Object, calendarServiceMock.Object);
 
-            LeaveSummary summary = sut.GetSickLeaveSummary(DateTime.Now);
+            LeaveSummary summary = sut.GetSummary(DateTime.Now, LeaveType.Sick);
 
             Assert.NotNull(summary);
             Assert.Equal(0, summary.BeginningBalance);
-            Assert.Equal(sickAccrued, summary.Earned);
+            Assert.Equal(expectedEarned, summary.Earned);
             Assert.Equal(LeaveType.Sick, summary.Type);
-            Assert.Equal(sickTaken, summary.Used);
-            Assert.Equal(sickBalance, summary.EndingBalance);
+            Assert.Equal(expectedTaken, summary.Used);
+            Assert.Equal(expectedBalance, summary.EndingBalance);
         }
 
         [Fact]
         public void LeaveSummaryService_TimeOff_Success()
         {
-            const int toffStart = 24;
-            const int toffTaken = 16;
-            const int toffBalance = toffStart - toffTaken;
-            settingsMock.Setup(x => x.TimeOffStart).Returns(toffStart);
-            scheduledMock.Setup(x => x.GetHoursTaken(It.Is<LeaveType>(t => t == LeaveType.Timeoff), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(toffTaken);
-            ILeaveSummaryService sut = new LeaveSummaryService(settingsMock.Object, scheduledMock.Object, calculatorMock.Object, calendarMock.Object);
+            int expectedBegin = 24;
+            int expectedUsed = 16;
+            int expectedEnd = expectedBegin - expectedUsed;
+            settingsMock.Setup(x => x.TimeOffStart).Returns(expectedBegin);
+            scheduledMock.Setup(x => x.GetHoursTaken(It.IsAny<DateTime>(), It.IsAny<DateTime>(), LeaveType.Timeoff)).Returns(expectedUsed);
+            ILeaveSummaryService sut = new LeaveSummaryService(settingsMock.Object, scheduledMock.Object, calendarServiceMock.Object);
 
-            LeaveSummary summary = sut.GetTimeOffAwardSummary(DateTime.Now);
+            LeaveSummary summary = sut.GetSummary(DateTime.Now, LeaveType.Timeoff);
 
             Assert.NotNull(summary);
-            Assert.Equal(toffStart, summary.BeginningBalance);
+            Assert.Equal(expectedBegin, summary.BeginningBalance);
             Assert.Equal(0, summary.Earned);
             Assert.Equal(LeaveType.Timeoff, summary.Type);
-            Assert.Equal(toffTaken, summary.Used);
-            Assert.Equal(toffBalance, summary.EndingBalance);
+            Assert.Equal(expectedUsed, summary.Used);
+            Assert.Equal(expectedEnd, summary.EndingBalance);
         }
 
         [Fact]
         public void LeaveSummaryService_UseOrLose_Success()
         {
-            const int annualStart = 240;
-            const int annualAccrued = 40;
-            const int annualTaken = 32;
-            const int useOrLose = (annualStart + annualAccrued - annualTaken) - Constants.MaxLeaveBalance;
-            ICalendar outCalendar = new FederalPayCalendar(new DateTime(2022, 01, 02));
+            int annualStart = Constants.MaxLeaveBalance;
+            int annualEarned = accrualRate * finalPayPeriod;
+            int annualTaken = 32;
+            int expectedEnd = annualEarned - annualTaken;
 
             settingsMock.Setup(x => x.AnnualLeaveStart).Returns(annualStart);
-            calculatorMock.Setup(x => x.EndingLeaveBalance(It.IsAny<int>())).Returns(annualAccrued);
-            scheduledMock.Setup(x => x.GetHoursTaken(It.Is<LeaveType>(t => t == LeaveType.Annual), It.IsAny<DateTime>(), It.IsAny<DateTime>())).Returns(annualTaken);
-            calendarMock.Setup(x => x.TryGetPayCalendarForDate(It.IsAny<DateTime>(), out outCalendar)).Returns(true);
-            ILeaveSummaryService sut = new LeaveSummaryService(settingsMock.Object, scheduledMock.Object, calculatorMock.Object, calendarMock.Object);
+            scheduledMock.Setup(x => x.GetHoursTaken(It.IsAny<DateTime>(), It.IsAny<DateTime>(), LeaveType.Annual)).Returns(annualTaken);
+            ILeaveSummaryService sut = new LeaveSummaryService(settingsMock.Object, scheduledMock.Object, calendarServiceMock.Object);
 
             LeaveSummary summary = sut.GetUseOrLoseSummary(DateTime.Now);
 
@@ -110,7 +115,7 @@ namespace FedTimeKeeper.Utilities.Tests
             Assert.Equal(0, summary.Earned);
             Assert.Equal(LeaveType.Annual, summary.Type);
             Assert.Equal(0, summary.Used);
-            Assert.Equal(useOrLose, summary.EndingBalance);
+            Assert.Equal(expectedEnd, summary.EndingBalance);
         }
     }
 }

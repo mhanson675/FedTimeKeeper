@@ -131,10 +131,10 @@ namespace FedTimeKeeper.ViewModels
                 
                 ReportPayPeriodEndDate = previousPayPeriod.EndDate;
 
-                Annual = leaveSummaryService.GetAnnualLeaveSummary(currentCalendar.StartDate, ReportPayPeriodEndDate);
-                UseOrLose = leaveSummaryService.GetUseOrLoseSummary(currentCalendar.StartDate, ReportPayPeriodEndDate);
-                Sick = leaveSummaryService.GetSickLeaveSummary(currentCalendar.StartDate, ReportPayPeriodEndDate);
-                TimeOff = leaveSummaryService.GetTimeOffAwardSummary(currentCalendar.StartDate, ReportPayPeriodEndDate);
+                Annual = leaveSummaryService.GetSummary(ReportPayPeriodEndDate, LeaveType.Annual);
+                UseOrLose = leaveSummaryService.GetUseOrLoseSummary(ReportPayPeriodEndDate);
+                Sick = leaveSummaryService.GetSummary(ReportPayPeriodEndDate, LeaveType.Sick);
+                TimeOff = leaveSummaryService.GetSummary(ReportPayPeriodEndDate, LeaveType.Timeoff);
             }
             catch (ArgumentOutOfRangeException ex)
             {
